@@ -1,0 +1,7 @@
+POST http://localhost:8080/bookings
+Content-Type: application/json
+
+{
+    "roomSlotId": "91cd16f5-a29e-4945-84a5-6a9b8b3cceb8",
+    "userEmail": "test@example.com"
+}
