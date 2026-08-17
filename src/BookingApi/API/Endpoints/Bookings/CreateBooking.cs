@@ -8,7 +8,7 @@ namespace BookingApi.API.Endpoints.Bookings
     {
         public override void Configure()
         {
-            Post("/bookings");
+            Post("/bookings/create");
             AllowAnonymous();
         }
 

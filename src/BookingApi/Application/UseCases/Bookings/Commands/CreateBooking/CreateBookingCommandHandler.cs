@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookingApi.Application.UseCases.Bookings.Commands.CreateBooking
 {
-    public class CreateBookingCommandHandler(IBookingRepository bookingRepository, IRoomSlotRepository roomSlotRepository) : IRequestHandler<CreateBookingCommand, Result<Guid>>
+    public class CreateBookingCommandHandler(IBookingRepository bookingRepository, IRoomSlotRepository roomSlotRepository, ILogger<CreateBookingCommandHandler> logger) : IRequestHandler<CreateBookingCommand, Result<Guid>>
     {
         public async Task<Result<Guid>> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
         {
@@ -26,6 +26,8 @@ namespace BookingApi.Application.UseCases.Bookings.Commands.CreateBooking
                 var booking = new Booking(request.RoomSlotId, request.UserEmail);
                 await bookingRepository.CreateBookingAsync(booking);
                 roomSlot.Book(request.UserEmail);
+
+                logger.LogInformation("User booking created for slot {RoomSlotId}", request.RoomSlotId);
                 
                 return Result<Guid>.Success(booking.Id);
             }

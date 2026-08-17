@@ -11,5 +11,12 @@ namespace BookingApi.Persistence.Repositories
             dbContext.Add(booking);
             return Task.CompletedTask;
         }
+
+        public async Task<Booking?> GetBookingByIdAsync(Guid Id)
+        {
+            return await dbContext.Bookings
+                .AsNoTracking()
+                .FirstOrDefaultAsync(b => b.Id == Id);
+        }
     }
 }

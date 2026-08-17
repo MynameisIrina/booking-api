@@ -12,7 +12,7 @@ namespace BookingApi.Persistence.Repositories
     {
         public Task<RoomSlot?> GetRoomSlotByIdAsync(Guid roomSlotId)
         {
-            return dbContext.RoomSlots.FirstOrDefaultAsync(rs => rs.Id == roomSlotId); 
+            return dbContext.RoomSlots.AsNoTracking().FirstOrDefaultAsync(rs => rs.Id == roomSlotId); 
         }
 
         public async Task UpdateRoomSlotAsync(RoomSlot roomSlot)
@@ -23,6 +23,14 @@ namespace BookingApi.Persistence.Repositories
         public async Task SaveChangesAsync()
         {
             await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IReadOnlyList<RoomSlot>> GetAvailableRoomSlotsAsync()
+        {
+            return await dbContext.RoomSlots
+                .AsNoTracking()
+                .Where(rs => !rs.IsBooked)
+                .ToListAsync();
         }
     }
 }

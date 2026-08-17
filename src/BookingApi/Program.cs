@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using FastEndpoints;
 using MediatR;
+using Serilog;
 using BookingApi.Application.Interfaces.Behaviors;
 using BookingApi.Application.Repositories;
 using BookingApi.Persistence.Repositories;
@@ -22,6 +23,15 @@ builder.Services.AddDbContext<BookingDbContext>(options => options.UseNpgsql(bui
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IRoomSlotRepository, RoomSlotRepository>();
 
+builder.Services.AddHealthChecks().AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!);
+
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration
+        .MinimumLevel.Information()
+        .WriteTo.Console(new Serilog.Formatting.Json.JsonFormatter());
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,6 +43,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseFastEndpoints();
+app.MapHealthChecks("/health");
 
 using (var scope = app.Services.CreateScope())
 {
