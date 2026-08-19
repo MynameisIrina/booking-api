@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookingApi.Application.Common.Pagination;
 using BookingApi.Application.UseCases.Bookings.Queries.GetRoomSlots;
 using FastEndpoints;
 using MediatR;
 
 namespace BookingApi.API.Endpoints.RoomSlots
 {
-    public class GetRoomSlots(IMediator mediator): Endpoint<EmptyRequest, GetRoomSlotsResponse>
+    public class GetRoomSlots(IMediator mediator): Endpoint<GetRoomSlotsRequest, GetRoomSlotsResponse>
     {
         public override void Configure()
         {
@@ -16,9 +17,9 @@ namespace BookingApi.API.Endpoints.RoomSlots
             AllowAnonymous();
         }
 
-        public override async Task HandleAsync(EmptyRequest request, CancellationToken ct)
+        public override async Task HandleAsync(GetRoomSlotsRequest request, CancellationToken ct)
         {
-            var result = await mediator.Send(new GetRoomSlotsQuery(), ct);
+            var result = await mediator.Send(new GetRoomSlotsQuery(request), ct);
             if(!result.IsSuccess)
             {
                 await Send.ErrorsAsync((int) result.Status, ct);
@@ -29,5 +30,7 @@ namespace BookingApi.API.Endpoints.RoomSlots
             await Send.OkAsync(response, cancellation: ct);
         }
     }
-    public sealed record GetRoomSlotsResponse(List<RoomSlotDto> RoomSlots);
+    public sealed record GetRoomSlotsResponse(PagedResponse<RoomSlotDto> RoomSlots);
+
+    public sealed record GetRoomSlotsRequest: PagedRequest;
 }
