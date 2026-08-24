@@ -7,6 +7,7 @@ using Serilog;
 using BookingApi.Application.Interfaces.Behaviors;
 using BookingApi.Application.Repositories;
 using BookingApi.Persistence.Repositories;
+using BookingApi.Application.Interfaces.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,9 @@ builder.Host.UseSerilog((context, configuration) =>
         .WriteTo.Console(new Serilog.Formatting.Json.JsonFormatter());
 });
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,6 +45,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 app.UseFastEndpoints();
 app.MapHealthChecks("/health");
