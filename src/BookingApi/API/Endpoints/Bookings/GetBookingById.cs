@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Ardalis.Result;
+using BookingApi.API.Extensions;
 using BookingApi.Application.UseCases.Bookings.Commands.GetById;
 using BookingApi.Domain.Entities;
 using FastEndpoints;
@@ -18,18 +19,22 @@ namespace BookingApi.API.Endpoints.Bookings
             AllowAnonymous();
         }
 
-        public override async Task HandleAsync(GetBookingRequest request, CancellationToken cancellationToken)
+        public override async Task HandleAsync(GetBookingRequest request, CancellationToken ct)
         {
-            var result = await mediator.Send(new GetBookingByIdCommand(request.Id), cancellationToken);
+            var result = await mediator.Send(new GetBookingByIdCommand(request.Id), ct);
+
             if(!result.IsSuccess)
             {
-                await Send.ErrorsAsync((int) result.Status, cancellationToken);
+                foreach(var error in result.ValidationErrors)
+                {
+                    AddError(error.ErrorMessage);
+                }
+                await Send.ErrorsAsync(result.Status.ToHttpStatusCode(), cancellation: ct);
                 return;
-                
             }
 
             var response = new GetBookingResponse(result.Value);
-            await Send.OkAsync(response);
+            await Send.OkAsync(response, cancellation: ct);
         }
     }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookingApi.API.Extensions;
 using BookingApi.Application.Common.Pagination;
 using BookingApi.Application.UseCases.Bookings.Queries.GetRoomSlots;
 using FastEndpoints;
@@ -22,7 +23,11 @@ namespace BookingApi.API.Endpoints.RoomSlots
             var result = await mediator.Send(new GetRoomSlotsQuery(request), ct);
             if(!result.IsSuccess)
             {
-                await Send.ErrorsAsync((int) result.Status, ct);
+                foreach(var error in result.ValidationErrors)
+                {
+                    AddError(error.ErrorMessage);
+                }
+                await Send.ErrorsAsync(result.Status.ToHttpStatusCode(), cancellation: ct);
                 return;
             }
 

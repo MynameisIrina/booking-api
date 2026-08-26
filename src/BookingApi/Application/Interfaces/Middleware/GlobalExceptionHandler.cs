@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
 
 namespace BookingApi.Application.Interfaces.Middleware
 {
@@ -9,6 +10,7 @@ namespace BookingApi.Application.Interfaces.Middleware
         {
             var(statusCode, title) = exception switch
             {
+                ValidationException => (StatusCodes.Status400BadRequest, "Validation Error"),
                 ArgumentException or InvalidOperationException => (StatusCodes.Status400BadRequest, "Bad Request"),
                 KeyNotFoundException => (StatusCodes.Status404NotFound, "Not Found"),
                 UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "Unauthorized"),

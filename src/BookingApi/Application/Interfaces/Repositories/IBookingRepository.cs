@@ -4,7 +4,8 @@ namespace BookingApi.Application.Repositories
 {
     public interface IBookingRepository
     {
-        public Task<Booking?> GetBookingByIdAsync(Guid Id);
+        public Task<Booking?> GetByIdAsync(Guid Id);
         public Task CreateBookingAsync(Booking booking);
+        public Task Delete(Booking booking);
     }
 }

@@ -8,6 +8,8 @@ using BookingApi.Application.Interfaces.Behaviors;
 using BookingApi.Application.Repositories;
 using BookingApi.Persistence.Repositories;
 using BookingApi.Application.Interfaces.Middleware;
+using BookingApi.Application.UseCases.Bookings.Commands.CreateBooking;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +19,9 @@ builder.Services.AddOpenApi();
 builder.Services.AddFastEndpoints();
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddValidatorsFromAssembly(typeof(CreateBookingCommandValidator).Assembly);
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(SaveChangesBehavior<,>));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 // Connect to database
 builder.Services.AddDbContext<BookingDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

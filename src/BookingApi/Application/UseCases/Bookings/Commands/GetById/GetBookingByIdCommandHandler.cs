@@ -12,7 +12,7 @@ namespace BookingApi.Application.UseCases.Bookings.Commands.GetById
     {
         public async Task<Result<BookingDto>> Handle(GetBookingByIdCommand request, CancellationToken cancellationToken)
         {
-            var booking = await bookingRepository.GetBookingByIdAsync(request.Id);
+            var booking = await bookingRepository.GetByIdAsync(request.Id);
             if(booking is null)
                 return Result<BookingDto>.NotFound("Booking was not found.");
 

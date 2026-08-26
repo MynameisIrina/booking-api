@@ -12,7 +12,13 @@ namespace BookingApi.Persistence.Repositories
             return Task.CompletedTask;
         }
 
-        public async Task<Booking?> GetBookingByIdAsync(Guid Id)
+        public Task Delete(Booking booking)
+        {
+            dbContext.Remove(booking);
+            return Task.CompletedTask;
+        }
+
+        public async Task<Booking?> GetByIdAsync(Guid Id)
         {
             return await dbContext.Bookings
                 .AsNoTracking()
