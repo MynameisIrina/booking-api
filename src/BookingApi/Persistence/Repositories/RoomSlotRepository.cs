@@ -12,9 +12,9 @@ namespace BookingApi.Persistence.Repositories
 {
     public class RoomSlotRepository(BookingDbContext dbContext) : IRoomSlotRepository
     {
-        public Task<RoomSlot?> GetRoomSlotByIdAsync(Guid roomSlotId)
+        public Task<RoomSlot?> GetRoomSlotByIdTrackedAsync(Guid roomSlotId)
         {
-            return dbContext.RoomSlots.AsNoTracking().FirstOrDefaultAsync(rs => rs.Id == roomSlotId); 
+            return dbContext.RoomSlots.FirstOrDefaultAsync(rs => rs.Id == roomSlotId); 
         }
 
         public async Task UpdateRoomSlotAsync(RoomSlot roomSlot)

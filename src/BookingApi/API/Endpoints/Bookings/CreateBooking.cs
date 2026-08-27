@@ -1,3 +1,4 @@
+using BookingApi.API.Extensions;
 using BookingApi.Application.UseCases.Bookings.CreateBooking;
 using FastEndpoints;
 using MediatR;
@@ -17,7 +18,11 @@ namespace BookingApi.API.Endpoints.Bookings
             var result = await mediator.Send(new CreateBookingCommand(request.RoomSlotId, request.UserEmail), ct);
             if(!result.IsSuccess)
             {
-                await Send.ErrorsAsync((int) result.Status, ct);
+                foreach(var error in result.ValidationErrors)
+                {
+                    AddError(error.ErrorMessage);
+                }
+                await Send.ErrorsAsync(result.Status.ToHttpStatusCode(), cancellation: ct);
                 return;
             }
 

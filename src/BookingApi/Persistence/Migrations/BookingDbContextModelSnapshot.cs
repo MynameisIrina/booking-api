@@ -38,8 +38,11 @@ namespace BookingApi.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("Xmin")
-                        .HasColumnType("bigint");
+                    b.Property<uint>("Xmin")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
 
                     b.HasKey("Id");
 
@@ -65,8 +68,11 @@ namespace BookingApi.Persistence.Migrations
                     b.Property<DateTime>("SlotDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("Xmin")
-                        .HasColumnType("bigint");
+                    b.Property<uint>("Xmin")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
 
                     b.HasKey("Id");
 

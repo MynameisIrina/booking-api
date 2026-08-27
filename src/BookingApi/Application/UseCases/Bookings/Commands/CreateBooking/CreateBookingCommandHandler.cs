@@ -13,7 +13,7 @@ namespace BookingApi.Application.UseCases.Bookings.Commands.CreateBooking
         {
             try
             {
-                var roomSlot = await roomSlotRepository.GetRoomSlotByIdAsync(request.RoomSlotId);
+                var roomSlot = await roomSlotRepository.GetRoomSlotByIdTrackedAsync(request.RoomSlotId);
                 if (roomSlot is null)
                 {
                     return Result<Guid>.NotFound($"Room slot with ID {request.RoomSlotId} not found.");

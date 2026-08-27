@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookingApi.Persistence.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20260708190524_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20260827180131_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,12 +31,21 @@ namespace BookingApi.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("RoomSlotId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("UserEmail")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<uint>("Xmin")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
 
                     b.HasKey("Id");
 
@@ -61,6 +70,12 @@ namespace BookingApi.Persistence.Migrations
 
                     b.Property<DateTime>("SlotDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<uint>("Xmin")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
 
                     b.HasKey("Id");
 
