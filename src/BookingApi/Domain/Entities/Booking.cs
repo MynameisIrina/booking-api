@@ -20,13 +20,13 @@ namespace BookingApi.Domain.Entities
             UserEmail = userEmail;
         }
 
-        public Result DeleteBooking()
+        public Result EnsureCanBeDeleted()
         {
-            if(CreatedAt.AddHours(24) < DateTime.UtcNow)
+            if (CreatedAt.AddMinutes(60) < DateTime.UtcNow)
             {
-                return Result.Invalid(new ValidationError("Booking cannot be deleted after 24 hours of creation."));
+                return Result.Invalid(new ValidationError("Booking can be deleted only within 60 minutes of creation."));
             }
-            
+
             return Result.Success();
         }
 
