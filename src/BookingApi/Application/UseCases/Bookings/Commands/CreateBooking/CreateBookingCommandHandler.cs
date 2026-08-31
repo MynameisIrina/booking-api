@@ -1,6 +1,6 @@
 using Ardalis.Result;
-using BookingApi.Application.Repositories;
-using BookingApi.Application.UseCases.Bookings.CreateBooking;
+using BookingApi.Application.Interfaces.Repositories;
+using BookingApi.Application.UseCases.Bookings.Commands.CreateBooking;
 using BookingApi.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

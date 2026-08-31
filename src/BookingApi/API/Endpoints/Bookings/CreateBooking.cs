@@ -1,5 +1,5 @@
 using BookingApi.API.Extensions;
-using BookingApi.Application.UseCases.Bookings.CreateBooking;
+using BookingApi.Application.UseCases.Bookings.Commands.CreateBooking;
 using FastEndpoints;
 using MediatR;
 

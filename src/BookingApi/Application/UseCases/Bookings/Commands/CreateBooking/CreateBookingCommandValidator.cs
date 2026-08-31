@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BookingApi.Application.UseCases.Bookings.CreateBooking;
+using BookingApi.Application.UseCases.Bookings.Commands.CreateBooking;
 using FluentValidation;
 using FluentValidation.Results;
 
@@ -13,13 +13,11 @@ namespace BookingApi.Application.UseCases.Bookings.Commands.CreateBooking
         public CreateBookingCommandValidator()
         {
             RuleFor(x => x.RoomSlotId)
-                .NotEmpty().WithMessage("RoomSlotId is required.")
-                .Must(id => id != Guid.Empty).WithMessage("RoomSlotId cannot be an empty GUID.");
+                .NotEmpty().WithMessage("RoomSlotId is required.");
 
             RuleFor(x => x.UserEmail)
                 .NotEmpty().WithMessage("User email is required.")
                 .EmailAddress().WithMessage("User email must be a valid email address.");
         }
-        
     }
 }

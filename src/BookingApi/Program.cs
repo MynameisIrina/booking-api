@@ -5,7 +5,7 @@ using FastEndpoints;
 using MediatR;
 using Serilog;
 using BookingApi.Application.Interfaces.Behaviors;
-using BookingApi.Application.Repositories;
+using BookingApi.Application.Interfaces.Repositories;
 using BookingApi.Persistence.Repositories;
 using BookingApi.Application.Interfaces.Middleware;
 using BookingApi.Application.UseCases.Bookings.Commands.CreateBooking;

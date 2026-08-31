@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Ardalis.Result;
-using BookingApi.Application.Repositories;
+using BookingApi.Application.Interfaces.Repositories;
 using MediatR;
 
 namespace BookingApi.Application.UseCases.Bookings.Commands.GetById
@@ -14,7 +14,9 @@ namespace BookingApi.Application.UseCases.Bookings.Commands.GetById
         {
             var booking = await bookingRepository.GetByIdAsync(request.Id);
             if(booking is null)
+            {
                 return Result<BookingDto>.NotFound("Booking was not found.");
+            }
 
             var bookingDto = new BookingDto(booking.Id, booking.UserEmail, booking.CreatedAt);
             return Result.Success(bookingDto);

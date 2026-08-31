@@ -18,7 +18,6 @@ namespace BookingApi.Application.Interfaces.Behaviors
     {
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            Console.WriteLine($"Validating request of type {typeof(TRequest).Name}");
             if(validators.Any())
             {
                 var context = new ValidationContext<TRequest>(request);
@@ -31,8 +30,6 @@ namespace BookingApi.Application.Interfaces.Behaviors
                     logger.LogWarning("Validation failed for request of type {RequestType}", typeof(TRequest).Name);
                     throw new ValidationException(failures);
                 }
-
-                Console.WriteLine($"Validation passed for request of type {typeof(TRequest).Name}");
             }
     
             return await next();

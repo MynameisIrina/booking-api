@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ardalis.Result;
 using BookingApi.Application.Common.Pagination;
-using BookingApi.Application.Repositories;
+using BookingApi.Application.Interfaces.Repositories;
 using MediatR;
 
 namespace BookingApi.Application.UseCases.Bookings.Queries.GetRoomSlots
