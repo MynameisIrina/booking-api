@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookingApi.Application.Interfaces.Middleware
 {
@@ -14,6 +15,7 @@ namespace BookingApi.Application.Interfaces.Middleware
                 ArgumentException or InvalidOperationException => (StatusCodes.Status400BadRequest, "Bad Request"),
                 KeyNotFoundException => (StatusCodes.Status404NotFound, "Not Found"),
                 UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "Unauthorized"),
+                DbUpdateConcurrencyException => (StatusCodes.Status409Conflict, "Conflict"),
                 _ => (StatusCodes.Status500InternalServerError, "Internal Server Error")
             };
 
