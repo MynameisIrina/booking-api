@@ -1,4 +1,4 @@
-using BookingApi.Application.Interfaces.Repositories;
+using BookingApi.Application.Repositories;
 using BookingApi.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 

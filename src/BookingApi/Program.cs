@@ -4,10 +4,10 @@ using Scalar.AspNetCore;
 using FastEndpoints;
 using MediatR;
 using Serilog;
-using BookingApi.Application.Interfaces.Behaviors;
-using BookingApi.Application.Interfaces.Repositories;
+using BookingApi.Application.Behaviors;
+using BookingApi.Application.Repositories;
 using BookingApi.Persistence.Repositories;
-using BookingApi.Application.Interfaces.Middleware;
+using BookingApi.API.Middleware;
 using BookingApi.Application.UseCases.Bookings.Commands.CreateBooking;
 using FluentValidation;
 

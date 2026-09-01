@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookingApi.Application.Interfaces.Middleware
+namespace BookingApi.API.Middleware
 {
     public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
     {

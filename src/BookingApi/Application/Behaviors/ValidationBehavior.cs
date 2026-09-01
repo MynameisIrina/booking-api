@@ -1,7 +1,7 @@
 using FluentValidation;
 using MediatR;
 
-namespace BookingApi.Application.Interfaces.Behaviors
+namespace BookingApi.Application.Behaviors
 {
     /// <summary>
     /// A MediatR pipeline behavior that validates requests using FluentValidation validators.

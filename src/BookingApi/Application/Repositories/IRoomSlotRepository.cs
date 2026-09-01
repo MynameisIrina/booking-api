@@ -1,7 +1,7 @@
 using BookingApi.Application.Common.Pagination;
 using BookingApi.Domain.Entities;
 
-namespace BookingApi.Application.Interfaces.Repositories
+namespace BookingApi.Application.Repositories
 {
     public interface IRoomSlotRepository
     {

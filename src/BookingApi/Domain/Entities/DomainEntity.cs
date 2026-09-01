@@ -1,4 +1,4 @@
-namespace BookingApi.Domain.Interfaces
+namespace BookingApi.Domain.Entities
 {
     public abstract class DomainEntity
     {

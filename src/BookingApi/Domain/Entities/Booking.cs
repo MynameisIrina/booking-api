@@ -1,5 +1,4 @@
 using Ardalis.Result;
-using BookingApi.Domain.Interfaces;
 
 namespace BookingApi.Domain.Entities
 {

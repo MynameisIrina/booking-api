@@ -1,5 +1,5 @@
 using Ardalis.Result;
-using BookingApi.Application.Interfaces.Abstractions;
+using BookingApi.Application.Abstractions;
 
 namespace BookingApi.Application.UseCases.Bookings.Commands.GetById
 {

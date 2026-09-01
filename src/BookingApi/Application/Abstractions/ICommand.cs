@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace BookingApi.Application.Interfaces.Abstractions
+namespace BookingApi.Application.Abstractions
 {
     public interface ICommand<TResponse> : IRequest<TResponse> { }
 }

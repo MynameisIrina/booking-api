@@ -1,8 +1,8 @@
-using BookingApi.Application.Interfaces.Abstractions;
+using BookingApi.Application.Abstractions;
 using BookingApi.Persistence;
 using MediatR;
 
-namespace BookingApi.Application.Interfaces.Behaviors
+namespace BookingApi.Application.Behaviors
 {
     /// <summary>
     /// A MediatR pipeline behavior that saves changes to the database after a command is handled.

@@ -1,5 +1,5 @@
 using BookingApi.Application.Common.Pagination;
-using BookingApi.Application.Interfaces.Repositories;
+using BookingApi.Application.Repositories;
 using BookingApi.Domain.Entities;
 using BookingApi.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;

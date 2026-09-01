@@ -1,4 +1,4 @@
-using BookingApi.Domain.Interfaces;
+using BookingApi.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
