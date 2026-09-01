@@ -1,17 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Ardalis.Result;
 using BookingApi.API.Extensions;
 using BookingApi.Application.UseCases.Bookings.Commands.GetById;
-using BookingApi.Domain.Entities;
 using FastEndpoints;
 using MediatR;
 
 namespace BookingApi.API.Endpoints.Bookings
 {
-    public class GetBookingById(IMediator mediator): Endpoint<GetBookingRequest, GetBookingResponse>
+    public class GetBookingById(IMediator mediator) : Endpoint<GetBookingRequest, GetBookingResponse>
     {
         public override void Configure()
         {
@@ -23,9 +17,9 @@ namespace BookingApi.API.Endpoints.Bookings
         {
             var result = await mediator.Send(new GetBookingByIdCommand(request.Id), ct);
 
-            if(!result.IsSuccess)
+            if (!result.IsSuccess)
             {
-                foreach(var error in result.ValidationErrors)
+                foreach (var error in result.ValidationErrors)
                 {
                     AddError(error.ErrorMessage);
                 }

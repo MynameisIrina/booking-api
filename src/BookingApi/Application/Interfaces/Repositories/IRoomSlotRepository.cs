@@ -3,7 +3,7 @@ using BookingApi.Domain.Entities;
 
 namespace BookingApi.Application.Interfaces.Repositories
 {
-    public interface IRoomSlotRepository 
+    public interface IRoomSlotRepository
     {
         public Task<PagedResponse<RoomSlot>> GetAvailableRoomSlotsAsync(PagedRequest request);
         public Task<RoomSlot?> GetRoomSlotByIdTrackedAsync(Guid roomSlotId);

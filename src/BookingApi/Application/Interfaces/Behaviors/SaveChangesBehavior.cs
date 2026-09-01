@@ -26,7 +26,7 @@ namespace BookingApi.Application.Interfaces.Behaviors
             logger.LogInformation("Changes saved to the database for request of type {RequestType}", typeof(TRequest).Name);
 
             return response;
-            
+
         }
     }
 }

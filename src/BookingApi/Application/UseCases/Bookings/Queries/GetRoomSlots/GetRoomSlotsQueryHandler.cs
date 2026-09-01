@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Ardalis.Result;
 using BookingApi.Application.Common.Pagination;
 using BookingApi.Application.Interfaces.Repositories;

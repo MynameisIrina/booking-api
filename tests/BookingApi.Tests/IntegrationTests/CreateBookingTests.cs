@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Testcontainers.PostgreSql;
-using Xunit;
 using BookingApi.Persistence;
 using Microsoft.EntityFrameworkCore;
 using BookingApi.Domain.Entities;
@@ -11,7 +6,7 @@ using BookingApi.Domain.Entities;
 
 namespace BookingApi.Tests.IntegrationTests
 {
-    public class CreateBookingTests: IAsyncLifetime
+    public class CreateBookingTests : IAsyncLifetime
     {
         private readonly PostgreSqlContainer _postgresqlContainer = new PostgreSqlBuilder()
             .WithDatabase("testdb")
@@ -23,10 +18,10 @@ namespace BookingApi.Tests.IntegrationTests
 
         public async Task InitializeAsync()
         {
-           await _postgresqlContainer.StartAsync();
-           var options = new DbContextOptionsBuilder<BookingDbContext>()
-                .UseNpgsql(_postgresqlContainer.GetConnectionString())
-                .Options;
+            await _postgresqlContainer.StartAsync();
+            var options = new DbContextOptionsBuilder<BookingDbContext>()
+                 .UseNpgsql(_postgresqlContainer.GetConnectionString())
+                 .Options;
 
             _dbContext = new BookingDbContext(options);
             await _dbContext.Database.EnsureCreatedAsync();
@@ -34,8 +29,8 @@ namespace BookingApi.Tests.IntegrationTests
 
         public async Task DisposeAsync()
         {
-           await _postgresqlContainer.StopAsync();
-           await _dbContext.DisposeAsync();
+            await _postgresqlContainer.StopAsync();
+            await _dbContext.DisposeAsync();
         }
 
         [Fact]
@@ -51,7 +46,7 @@ namespace BookingApi.Tests.IntegrationTests
             var results = await Task.WhenAll(task1, task2);
 
             Assert.Equal(1, results.Count(r => r == true));
-            Assert.Equal(1, results.Count(r => r == false)); 
+            Assert.Equal(1, results.Count(r => r == false));
         }
 
         private async Task<bool> BookSlotAsync(Guid roomSlotId, string email)
@@ -80,7 +75,7 @@ namespace BookingApi.Tests.IntegrationTests
             {
                 return false;
             }
-    
+
         }
     }
 }

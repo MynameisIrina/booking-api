@@ -20,7 +20,7 @@ namespace BookingApi.API.Endpoints.Bookings
 
             if (!result.IsSuccess)
             {
-                foreach(var error in result.ValidationErrors)
+                foreach (var error in result.ValidationErrors)
                 {
                     AddError(error.ErrorMessage);
                 }
@@ -33,5 +33,5 @@ namespace BookingApi.API.Endpoints.Bookings
     }
 
     public sealed record DeleteBookingRequest(Guid Id);
-   
+
 }

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BookingApi.Application.Common.Pagination;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +27,6 @@ namespace BookingApi.Persistence.Extensions
                 TotalCount = totalCount
             };
         }
-        
+
     }
 }

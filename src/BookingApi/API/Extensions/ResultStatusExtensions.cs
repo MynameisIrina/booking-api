@@ -15,6 +15,6 @@ namespace BookingApi.API.Extensions
                 _ => 500
             };
         }
-        
+
     }
 }

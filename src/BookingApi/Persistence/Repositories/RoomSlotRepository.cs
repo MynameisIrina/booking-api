@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BookingApi.Application.Common.Pagination;
 using BookingApi.Application.Interfaces.Repositories;
 using BookingApi.Domain.Entities;
@@ -14,7 +10,7 @@ namespace BookingApi.Persistence.Repositories
     {
         public Task<RoomSlot?> GetRoomSlotByIdTrackedAsync(Guid roomSlotId)
         {
-            return dbContext.RoomSlots.FirstOrDefaultAsync(rs => rs.Id == roomSlotId); 
+            return dbContext.RoomSlots.FirstOrDefaultAsync(rs => rs.Id == roomSlotId);
         }
 
         public async Task UpdateRoomSlotAsync(RoomSlot roomSlot)

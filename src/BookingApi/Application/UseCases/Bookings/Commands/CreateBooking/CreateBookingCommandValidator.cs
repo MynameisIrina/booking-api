@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BookingApi.Application.UseCases.Bookings.Commands.CreateBooking;
 using FluentValidation;
-using FluentValidation.Results;
 
 namespace BookingApi.Application.UseCases.Bookings.Commands.CreateBooking
 {

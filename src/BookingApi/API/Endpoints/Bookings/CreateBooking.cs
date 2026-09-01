@@ -5,7 +5,7 @@ using MediatR;
 
 namespace BookingApi.API.Endpoints.Bookings
 {
-    public class CreateBooking(IMediator mediator): Endpoint<CreateBookingRequest, CreateBookingResponse>
+    public class CreateBooking(IMediator mediator) : Endpoint<CreateBookingRequest, CreateBookingResponse>
     {
         public override void Configure()
         {
@@ -16,9 +16,9 @@ namespace BookingApi.API.Endpoints.Bookings
         public override async Task HandleAsync(CreateBookingRequest request, CancellationToken ct)
         {
             var result = await mediator.Send(new CreateBookingCommand(request.RoomSlotId, request.UserEmail), ct);
-            if(!result.IsSuccess)
+            if (!result.IsSuccess)
             {
-                foreach(var error in result.ValidationErrors)
+                foreach (var error in result.ValidationErrors)
                 {
                     AddError(error.ErrorMessage);
                 }

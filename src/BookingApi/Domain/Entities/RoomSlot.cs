@@ -19,7 +19,7 @@ public class RoomSlot : DomainEntity
 
     public Result Book(string userEmail)
     {
-        if(string.IsNullOrWhiteSpace(userEmail))
+        if (string.IsNullOrWhiteSpace(userEmail))
         {
             throw new ArgumentException("User email cannot be null or empty.", nameof(userEmail));
         }

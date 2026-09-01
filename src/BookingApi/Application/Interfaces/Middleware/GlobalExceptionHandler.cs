@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookingApi.Application.Interfaces.Middleware
 {
-    public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger): IExceptionHandler
+    public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            var(statusCode, title) = exception switch
+            var (statusCode, title) = exception switch
             {
                 ValidationException => (StatusCodes.Status400BadRequest, "Validation Error"),
                 ArgumentException or InvalidOperationException => (StatusCodes.Status400BadRequest, "Bad Request"),
@@ -19,7 +19,7 @@ namespace BookingApi.Application.Interfaces.Middleware
                 _ => (StatusCodes.Status500InternalServerError, "Internal Server Error")
             };
 
-            if(statusCode == StatusCodes.Status500InternalServerError)
+            if (statusCode == StatusCodes.Status500InternalServerError)
             {
                 logger.LogError(exception, "An unhandled exception occurred.");
             }
@@ -39,7 +39,7 @@ namespace BookingApi.Application.Interfaces.Middleware
             await httpContext.Response.WriteAsJsonAsync(problemDeatails, cancellationToken);
 
             return true;
-            
+
         }
     }
 }

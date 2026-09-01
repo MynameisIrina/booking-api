@@ -18,20 +18,20 @@ namespace BookingApi.Application.Interfaces.Behaviors
     {
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            if(validators.Any())
+            if (validators.Any())
             {
                 var context = new ValidationContext<TRequest>(request);
 
                 var results = await Task.WhenAll(validators.Select(v => v.ValidateAsync(context, cancellationToken)));
 
                 var failures = results.SelectMany(r => r.Errors).Where(f => f != null).ToList();
-                if(failures.Any())
+                if (failures.Any())
                 {
                     logger.LogWarning("Validation failed for request of type {RequestType}", typeof(TRequest).Name);
                     throw new ValidationException(failures);
                 }
             }
-    
+
             return await next();
         }
     }

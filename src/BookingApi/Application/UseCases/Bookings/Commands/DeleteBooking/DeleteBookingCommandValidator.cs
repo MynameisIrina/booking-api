@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace BookingApi.Application.UseCases.Bookings.Commands.DeleteBooking
 {
-    public class DeleteBookingCommandValidator : AbstractValidator<DeleteBookingCommand>    
+    public class DeleteBookingCommandValidator : AbstractValidator<DeleteBookingCommand>
     {
         public DeleteBookingCommandValidator()
         {
