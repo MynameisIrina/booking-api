@@ -11,6 +11,12 @@ namespace BookingApi.Domain.Entities
         private Booking() { }
         public Booking(Guid roomSlotId, string userEmail)
         {
+            if (roomSlotId == Guid.Empty)
+                throw new ArgumentException("RoomSlotId cannot be empty.", nameof(roomSlotId));
+
+            if (string.IsNullOrEmpty(userEmail))
+                throw new ArgumentException("UserEmail cannot be empty.", nameof(userEmail));
+
             RoomSlotId = roomSlotId;
             UserEmail = userEmail;
         }
