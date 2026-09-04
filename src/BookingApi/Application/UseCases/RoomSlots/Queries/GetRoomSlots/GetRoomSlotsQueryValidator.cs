@@ -12,6 +12,5 @@ namespace BookingApi.Application.UseCases.Bookings.Queries.GetRoomSlots
             RuleFor(x => x.PagedRequest.PageSize)
                 .GreaterThan(0).WithMessage("PageSize must be greater than 0.");
         }
-
     }
 }

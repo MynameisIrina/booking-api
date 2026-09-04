@@ -26,6 +26,18 @@ namespace BookingApi.Persistence.Repositories
                 .ToPageResponseAsync(request.Page, request.PageSize);
         }
 
+        public async Task<Guid> CreateRoomSlotAsync(RoomSlot roomSlot)
+        {
+            dbContext.RoomSlots.Add(roomSlot);
+            await dbContext.SaveChangesAsync();
+            return roomSlot.Id;
+        }
+
+        public async Task<RoomSlot?> GetRoomSlotByNameAndDateAsync(string roomName, DateTime slotDate)
+        {
+            return await dbContext.RoomSlots.FirstOrDefaultAsync(rs => rs.RoomName == roomName && rs.SlotDate == slotDate);
+        }
+
         public async Task SaveChangesAsync()
         {
             await dbContext.SaveChangesAsync();
