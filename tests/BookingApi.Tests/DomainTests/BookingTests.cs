@@ -72,6 +72,7 @@ namespace BookingApi.Tests.DomainTests
 
             // Assert
             Assert.False(result.IsSuccess);
+            Assert.Equal("Booking can be deleted only within 60 minutes of creation.", result.ValidationErrors.First().ErrorMessage);
         }
     }
 }

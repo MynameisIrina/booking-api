@@ -12,6 +12,10 @@ public class RoomSlot : DomainEntity
     private RoomSlot() { }
     public RoomSlot(string roomName, DateTime slotDate)
     {
+        if(string.IsNullOrWhiteSpace(roomName))
+        {
+            throw new ArgumentException("Room name cannot be null or empty.", nameof(roomName));
+        }
         RoomName = roomName;
         SlotDate = slotDate;
     }
