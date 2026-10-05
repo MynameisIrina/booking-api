@@ -14,7 +14,7 @@ namespace BookingApi.Application.UseCases.Bookings.Commands.GetById
                 return Result<BookingDto>.NotFound("Booking was not found.");
             }
 
-            var bookingDto = new BookingDto(booking.Id, booking.UserEmail, booking.CreatedAt);
+            var bookingDto = new BookingDto(booking.RoomSlotId, booking.UserEmail, booking.CreatedAt);
             return Result.Success(bookingDto);
         }
     }

@@ -42,7 +42,6 @@ namespace BookingApi.Tests.DomainTests
             // Arrange
             var roomSlot = new RoomSlot("Conference Room A", DateTime.UtcNow.AddDays(1));
             var userEmail = "test.@example.com";
-            roomSlot.GetType().GetProperty("IsBooked")!.SetValue(roomSlot, false);
 
             // Act
             var result = roomSlot.Book(userEmail);

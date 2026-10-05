@@ -44,7 +44,7 @@ namespace BookingApi.Tests.DomainTests
         }
 
         [Fact]
-        public void Booking_EnsureCanBeDeleted_Within60Minutes_ShouldReurnSuccess()
+        public void Booking_EnsureCanBeDeleted_Within60Minutes_ShouldReturnSuccess()
         {
             // Arrange
             var roomSlotId = Guid.CreateVersion7();
