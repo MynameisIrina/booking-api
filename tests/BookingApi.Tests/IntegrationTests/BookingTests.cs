@@ -33,14 +33,7 @@ namespace BookingApi.Tests.IntegrationTests
 
             _factory = _baseFactory.WithWebHostBuilder(builder =>
             {
-                builder.ConfigureServices(services =>
-                {
-                    var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<BookingDbContext>));
-                    if (descriptor != null) services.Remove(descriptor);
-
-                    services.AddDbContext<BookingDbContext>(options =>
-                        options.UseNpgsql(_postgresqlContainer.GetConnectionString()));
-                });
+                builder.UseSetting("ConnectionStrings:DefaultConnection", _postgresqlContainer.GetConnectionString());
             });
 
             _client = _factory.CreateClient();
