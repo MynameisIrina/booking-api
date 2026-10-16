@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Json;
 using BookingApi.API.Endpoints.RoomSlots;
+using BookingApi.API.Endpoints.Bookings;
 
 
 namespace BookingApi.Tests.IntegrationTests
@@ -107,9 +108,7 @@ namespace BookingApi.Tests.IntegrationTests
         [Fact]
         public async Task DeleteBooking_ShouldFreeUpRoomSlot()
         {
-            Guid bookingId;
             Guid roomSlotId;
-            DateTime slotDate;
             // Arrange
             using (var scope = CreateScope())
             {
@@ -119,13 +118,7 @@ namespace BookingApi.Tests.IntegrationTests
                 dbContext.RoomSlots.Add(roomSlot);
                 await dbContext.SaveChangesAsync();
 
-                var booking = new Booking(roomSlot.Id, "test@example.com");
-                dbContext.Bookings.Add(booking);
-                await dbContext.SaveChangesAsync();
-
-                bookingId = booking.Id;
                 roomSlotId = roomSlot.Id;
-                slotDate = roomSlot.SlotDate;
             }
 
             // Act
@@ -135,14 +128,16 @@ namespace BookingApi.Tests.IntegrationTests
                 UserEmail = "test@example.com"
             };
 
-            await _client.PostAsJsonAsync("/bookings/create", requestBody);
+            var bookingResponse = await _client.PostAsJsonAsync("/bookings/create", requestBody);
+            var bookingId = (await bookingResponse.Content.ReadFromJsonAsync<CreateBookingResponse>())!.BookingId;
             await _client.DeleteAsync("/bookings/" + bookingId);
 
-            var task3 = _client.GetAsync("/room-slots/available?page=1&pageSize=10");
-            var availableSlotsResponse = await task3;
+            var availableSlotsResponse = await _client.GetAsync("/room-slots/available?page=1&pageSize=10");
             var bodyResponse = await availableSlotsResponse.Content.ReadFromJsonAsync<GetRoomSlotsResponse>();
 
             // Assert
+            Assert.True(bookingResponse.IsSuccessStatusCode);
+            Assert.True(availableSlotsResponse.IsSuccessStatusCode);
             Assert.Contains(bodyResponse!.RoomSlots.Data, s => s.Id == roomSlotId);
         }
     }

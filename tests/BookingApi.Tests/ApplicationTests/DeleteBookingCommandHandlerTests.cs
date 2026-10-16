@@ -30,7 +30,7 @@ namespace BookingApi.Tests.ApplicationTests
             var roomSlotId = Guid.NewGuid();
             var roomSlot = new RoomSlot("TestRoom", DateTime.UtcNow);
             var booking = new Booking(roomSlotId, "test@example.com");
-            roomSlot.GetType().GetProperty("IsBooked")?.SetValue(roomSlot, true);
+            roomSlot.Book(booking.UserEmail);
 
             bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId))
                 .ReturnsAsync(booking); 

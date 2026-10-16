@@ -66,5 +66,20 @@ namespace BookingApi.Tests.DomainTests
             Assert.False(result.IsSuccess);
             Assert.Equal($"Room slot {roomSlot.Id} is already booked.", result.ValidationErrors.First().ErrorMessage);
         }
+
+        [Fact]
+        public void RoomSlot_FreeUpBookedRoom_ShouldFreeUpRoomSlot()
+        {
+            // Arrange
+            var roomSlot = new RoomSlot("Conference Room A", DateTime.UtcNow.AddDays(1));
+            var userEmail = "test@example.com";
+            roomSlot.Book(userEmail);
+
+            // Act
+            roomSlot.FreeUp();
+
+            // Assert
+            Assert.False(roomSlot.IsBooked);
+        }
     }
 }
