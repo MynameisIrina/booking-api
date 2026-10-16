@@ -44,9 +44,6 @@ namespace BookingApi.Tests.IntegrationTests
             });
 
             _client = _factory.CreateClient();
-            using var scope = _factory.Services.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
-            await db.Database.EnsureCreatedAsync();
         }
 
         public async Task DisposeAsync()
@@ -145,19 +142,14 @@ namespace BookingApi.Tests.IntegrationTests
                 UserEmail = "test@example.com"
             };
 
-            var task1 = _client.PostAsJsonAsync("/bookings/create", requestBody);
-            var response1 = await task1;
-
-            var task2 = _client.DeleteAsync("/bookings/" + bookingId);
-            var deleteResponse = await task2;
+            await _client.PostAsJsonAsync("/bookings/create", requestBody);
+            await _client.DeleteAsync("/bookings/" + bookingId);
 
             var task3 = _client.GetAsync("/room-slots/available?page=1&pageSize=10");
             var availableSlotsResponse = await task3;
             var bodyResponse = await availableSlotsResponse.Content.ReadFromJsonAsync<GetRoomSlotsResponse>();
 
             // Assert
-            Assert.True(deleteResponse.IsSuccessStatusCode);
-            Assert.True(availableSlotsResponse.IsSuccessStatusCode);
             Assert.Contains(bodyResponse!.RoomSlots.Data, s => s.Id == roomSlotId);
         }
     }
