@@ -22,8 +22,6 @@ namespace BookingApi.Tests.IntegrationTests
             .WithPassword("testpassword")
             .Build();
 
-        private BookingDbContext _dbContext = default!;
- 
         public BookingTests(WebApplicationFactory<Program> baseFactory)
         {
             _baseFactory = baseFactory;
@@ -32,13 +30,13 @@ namespace BookingApi.Tests.IntegrationTests
         public async Task InitializeAsync()
         {
             await _postgresqlContainer.StartAsync();
-            
+
             _factory = _baseFactory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
                 {
                     var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<BookingDbContext>));
-                    if(descriptor != null) services.Remove(descriptor);
+                    if (descriptor != null) services.Remove(descriptor);
 
                     services.AddDbContext<BookingDbContext>(options =>
                         options.UseNpgsql(_postgresqlContainer.GetConnectionString()));
@@ -47,14 +45,19 @@ namespace BookingApi.Tests.IntegrationTests
 
             _client = _factory.CreateClient();
             using var scope = _factory.Services.CreateScope();
-            _dbContext = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
-            await _dbContext.Database.EnsureCreatedAsync();
+            var db = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
+            await db.Database.EnsureCreatedAsync();
         }
 
         public async Task DisposeAsync()
         {
             await _postgresqlContainer.StopAsync();
-            await _dbContext.DisposeAsync();
+            await _factory.DisposeAsync();
+        }
+
+        private IServiceScope CreateScope()
+        {
+            return _factory.Services.CreateScope();
         }
 
         [Fact]
@@ -62,7 +65,7 @@ namespace BookingApi.Tests.IntegrationTests
         {
             // Arrange
             Guid roomSlotId;
-            using (var scope = _factory.Services.CreateScope())
+            using (var scope = CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
 
@@ -73,7 +76,8 @@ namespace BookingApi.Tests.IntegrationTests
             }
 
             // Act
-            var requestBody = new {
+            var requestBody = new
+            {
                 RoomSlotId = roomSlotId,
                 UserEmail = "test@example.com"
             };
@@ -102,7 +106,7 @@ namespace BookingApi.Tests.IntegrationTests
             Assert.Equal(1, successCount);
             Assert.Equal(1, conflictCount);
 
-            using (var scope = _factory.Services.CreateScope())
+            using (var scope = CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
                 var bookingsCount = await dbContext.Bookings.CountAsync(b => b.RoomSlotId == roomSlotId);
@@ -117,7 +121,7 @@ namespace BookingApi.Tests.IntegrationTests
             Guid roomSlotId;
             DateTime slotDate;
             // Arrange
-            using(var scope = _factory.Services.CreateScope())
+            using (var scope = CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
 
@@ -135,9 +139,11 @@ namespace BookingApi.Tests.IntegrationTests
             }
 
             // Act
-            var requestBody = new {
+            var requestBody = new
+            {
                 RoomSlotId = roomSlotId,
-                UserEmail = "test@example.com" };
+                UserEmail = "test@example.com"
+            };
 
             var task1 = _client.PostAsJsonAsync("/bookings/create", requestBody);
             var response1 = await task1;
