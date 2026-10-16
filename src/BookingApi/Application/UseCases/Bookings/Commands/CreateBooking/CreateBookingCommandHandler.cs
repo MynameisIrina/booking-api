@@ -11,17 +11,14 @@ namespace BookingApi.Application.UseCases.Bookings.Commands.CreateBooking
         {
             var roomSlot = await roomSlotRepository.GetRoomSlotByIdTrackedAsync(request.RoomSlotId);
             if (roomSlot is null)
-            {
                 return Result<Guid>.NotFound($"Room slot with ID {request.RoomSlotId} not found.");
-            }
 
             var booking = new Booking(request.RoomSlotId, request.UserEmail);
-            await bookingRepository.CreateBookingAsync(booking);
             var bookResult = roomSlot.Book(request.UserEmail);
             if (!bookResult.IsSuccess)
-            {
                 return Result<Guid>.Conflict(bookResult.Errors.ToArray());
-            }
+
+            await bookingRepository.CreateBookingAsync(booking);
 
             logger.LogInformation("User booking created for slot {RoomSlotId}", request.RoomSlotId);
 

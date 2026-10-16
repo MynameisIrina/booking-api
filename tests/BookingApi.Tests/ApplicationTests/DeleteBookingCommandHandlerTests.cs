@@ -13,11 +13,13 @@ namespace BookingApi.Tests.ApplicationTests
     {
         private readonly DeleteBookingCommandHandler handler;
         private Mock<IBookingRepository> bookingRepositoryMock;
+        private Mock<IRoomSlotRepository> roomSlotRepositoryMock;
 
         public DeleteBookingCommandHandlerTests()
         {
             bookingRepositoryMock = new Mock<IBookingRepository>();
-            handler = new DeleteBookingCommandHandler(bookingRepositoryMock.Object);
+            roomSlotRepositoryMock = new Mock<IRoomSlotRepository>();
+            handler = new DeleteBookingCommandHandler(bookingRepositoryMock.Object, roomSlotRepositoryMock.Object);
         }
 
         [Fact]

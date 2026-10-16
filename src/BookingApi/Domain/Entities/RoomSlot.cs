@@ -12,10 +12,9 @@ public class RoomSlot : DomainEntity
     private RoomSlot() { }
     public RoomSlot(string roomName, DateTime slotDate)
     {
-        if(string.IsNullOrWhiteSpace(roomName))
-        {
+        if (string.IsNullOrWhiteSpace(roomName))
             throw new ArgumentException("Room name cannot be null or empty.", nameof(roomName));
-        }
+        
         RoomName = roomName;
         SlotDate = slotDate;
     }
@@ -23,17 +22,23 @@ public class RoomSlot : DomainEntity
     public Result Book(string userEmail)
     {
         if (string.IsNullOrWhiteSpace(userEmail))
-        {
             throw new ArgumentException("User email cannot be null or empty.", nameof(userEmail));
-        }
 
         if (IsBooked)
-        {
             return Result.Invalid(new ValidationError($"Room slot {Id} is already booked."));
-        }
 
         IsBooked = true;
         BookedByEmail = userEmail;
+        return Result.Success();
+    }
+
+    public Result FreeUp()
+    {
+        if (!IsBooked)
+            return Result.Invalid(new ValidationError($"Room slot {Id} is not booked."));
+
+        IsBooked = false;
+        BookedByEmail = null;
         return Result.Success();
     }
 }

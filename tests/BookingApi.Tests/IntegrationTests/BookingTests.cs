@@ -79,16 +79,35 @@ namespace BookingApi.Tests.IntegrationTests
             };
 
             var task1 = _client.PostAsJsonAsync("/bookings/create", requestBody);
+            var response1 = await task1;
             var task2 = _client.PostAsJsonAsync("/bookings/create", requestBody);
-
-            var responses = await Task.WhenAll(task1, task2);
+            var response2 = await task2;
 
             // Assert
-            var successCount = responses.Count(r => r.IsSuccessStatusCode);
-            var conflictCount = responses.Count(r => r.StatusCode == System.Net.HttpStatusCode.Conflict);
+            var successCount = 0;
+            var conflictCount = 0;
+
+            if (response1.IsSuccessStatusCode)
+                successCount++;
+
+            if (response2.IsSuccessStatusCode)
+                successCount++;
+
+            if (response1.StatusCode == System.Net.HttpStatusCode.Conflict)
+                conflictCount++;
+
+            if (response2.StatusCode == System.Net.HttpStatusCode.Conflict)
+                conflictCount++;
 
             Assert.Equal(1, successCount);
             Assert.Equal(1, conflictCount);
+
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
+                var bookingsCount = await dbContext.Bookings.CountAsync(b => b.RoomSlotId == roomSlotId);
+                Assert.Equal(1, bookingsCount);
+            }
         }
 
         [Fact]
@@ -116,20 +135,18 @@ namespace BookingApi.Tests.IntegrationTests
             }
 
             // Act
-            var deleteRequestBody = new {
-                BookingId = bookingId
-            };
+            var requestBody = new {
+                RoomSlotId = roomSlotId,
+                UserEmail = "test@example.com" };
 
-            var getAvailableSlotsRequestBody = new {
-                RoomName = "TestName",
-                SlotDate = slotDate
-            };
+            var task1 = _client.PostAsJsonAsync("/bookings/create", requestBody);
+            var response1 = await task1;
 
-            var task1 = _client.DeleteAsync("/bookings/" + bookingId);
-            var deleteResponse = await task1;
+            var task2 = _client.DeleteAsync("/bookings/" + bookingId);
+            var deleteResponse = await task2;
 
-            var task2 = _client.GetAsync("/room-slots/available?page=1&pageSize=10");
-            var availableSlotsResponse = await task2;
+            var task3 = _client.GetAsync("/room-slots/available?page=1&pageSize=10");
+            var availableSlotsResponse = await task3;
             var bodyResponse = await availableSlotsResponse.Content.ReadFromJsonAsync<GetRoomSlotsResponse>();
 
             // Assert
