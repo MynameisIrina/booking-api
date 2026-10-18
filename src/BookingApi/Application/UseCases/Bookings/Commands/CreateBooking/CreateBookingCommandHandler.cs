@@ -5,7 +5,7 @@ using MediatR;
 
 namespace BookingApi.Application.UseCases.Bookings.Commands.CreateBooking
 {
-    public class CreateBookingCommandHandler(IBookingRepository bookingRepository, IRoomSlotRepository roomSlotRepository, ILogger<CreateBookingCommandHandler> logger) : IRequestHandler<CreateBookingCommand, Result<Guid>>
+    public class CreateBookingCommandHandler(IBookingRepository bookingRepository, IRoomSlotRepository roomSlotRepository, ILogger<CreateBookingCommandHandler> logger, TimeProvider timeProvider) : IRequestHandler<CreateBookingCommand, Result<Guid>>
     {
         public async Task<Result<Guid>> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
         {
@@ -13,7 +13,7 @@ namespace BookingApi.Application.UseCases.Bookings.Commands.CreateBooking
             if (roomSlot is null)
                 return Result<Guid>.NotFound($"Room slot with ID {request.RoomSlotId} not found.");
 
-            var booking = new Booking(request.RoomSlotId, request.UserEmail);
+            var booking = new Booking(request.RoomSlotId, request.UserEmail, timeProvider.GetUtcNow());
             var bookResult = roomSlot.Book(request.UserEmail);
             if (!bookResult.IsSuccess)
                 return Result<Guid>.Conflict(bookResult.Errors.ToArray());

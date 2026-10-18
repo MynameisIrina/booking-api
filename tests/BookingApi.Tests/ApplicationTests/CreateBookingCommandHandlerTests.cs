@@ -17,7 +17,7 @@ namespace BookingApi.Tests.ApplicationTests
         {
             bookingRepositoryMock = new Mock<IBookingRepository>();
             roomSlotRepositoryMock = new Mock<IRoomSlotRepository>();
-            handler = new CreateBookingCommandHandler(bookingRepositoryMock.Object, roomSlotRepositoryMock.Object, Mock.Of<ILogger<CreateBookingCommandHandler>>());
+            handler = new CreateBookingCommandHandler(bookingRepositoryMock.Object, roomSlotRepositoryMock.Object, Mock.Of<ILogger<CreateBookingCommandHandler>>(), TimeProvider.System);
         }
 
         [Fact]

@@ -22,7 +22,7 @@ namespace BookingApi.Tests.ApplicationTests
             // Arrange
             var bookingId = Guid.NewGuid();
             var roomSlotId = Guid.NewGuid();
-            var booking = new Booking(roomSlotId, "test@example.com");
+            var booking = new Booking(roomSlotId, "test@example.com", DateTimeOffset.UtcNow);
 
             _bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId))
                 .ReturnsAsync(booking);

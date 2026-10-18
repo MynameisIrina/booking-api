@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BookingApi.Application.Repositories;
 using BookingApi.Application.UseCases.Bookings.Commands.DeleteBooking;
 using BookingApi.Domain.Entities;
+using Microsoft.Extensions.Time.Testing;
 using Moq;
 
 namespace BookingApi.Tests.ApplicationTests
@@ -14,12 +15,14 @@ namespace BookingApi.Tests.ApplicationTests
         private readonly DeleteBookingCommandHandler handler;
         private Mock<IBookingRepository> bookingRepositoryMock;
         private Mock<IRoomSlotRepository> roomSlotRepositoryMock;
+        private readonly FakeTimeProvider fakeTimeProvider;
 
         public DeleteBookingCommandHandlerTests()
         {
             bookingRepositoryMock = new Mock<IBookingRepository>();
             roomSlotRepositoryMock = new Mock<IRoomSlotRepository>();
-            handler = new DeleteBookingCommandHandler(bookingRepositoryMock.Object, roomSlotRepositoryMock.Object);
+            fakeTimeProvider = new FakeTimeProvider();
+            handler = new DeleteBookingCommandHandler(bookingRepositoryMock.Object, roomSlotRepositoryMock.Object, fakeTimeProvider);
         }
 
         [Fact]
@@ -29,11 +32,12 @@ namespace BookingApi.Tests.ApplicationTests
             var bookingId = Guid.NewGuid();
             var roomSlotId = Guid.NewGuid();
             var roomSlot = new RoomSlot("TestRoom", DateTime.UtcNow);
-            var booking = new Booking(roomSlotId, "test@example.com");
+            var booking = new Booking(roomSlotId, "test@example.com", DateTimeOffset.UtcNow);
             roomSlot.Book(booking.UserEmail);
+            fakeTimeProvider.SetUtcNow(booking.CreatedAt.AddMinutes(30));
 
             bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId))
-                .ReturnsAsync(booking); 
+                .ReturnsAsync(booking);
             
             roomSlotRepositoryMock.Setup(r => r.GetRoomSlotByIdTrackedAsync(roomSlotId))
                 .ReturnsAsync(roomSlot);
@@ -73,11 +77,11 @@ namespace BookingApi.Tests.ApplicationTests
             // Arrange
             var bookingId = Guid.NewGuid();
             var roomSlotId = Guid.NewGuid();
-            var booking = new Booking(roomSlotId, "test@example.com");
+            var booking = new Booking(roomSlotId, "test@example.com", DateTimeOffset.UtcNow);
             var roomSlot = new RoomSlot("TestRoom", DateTime.UtcNow);
 
             // Simulate a booking that cannot be deleted
-            booking.GetType().GetProperty("CreatedAt")?.SetValue(booking, DateTime.UtcNow.AddMinutes(-120));
+            fakeTimeProvider.SetUtcNow(booking.CreatedAt.AddMinutes(120));
 
             bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId))
                 .ReturnsAsync(booking);

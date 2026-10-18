@@ -6,10 +6,10 @@ namespace BookingApi.Domain.Entities
     {
         public Guid RoomSlotId { get; private set; }
         public string UserEmail { get; private set; } = string.Empty;
-        public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; private set; }
 
         private Booking() { }
-        public Booking(Guid roomSlotId, string userEmail)
+        public Booking(Guid roomSlotId, string userEmail, DateTimeOffset now)
         {
             if (roomSlotId == Guid.Empty)
                 throw new ArgumentException("RoomSlotId cannot be empty.", nameof(roomSlotId));
@@ -19,11 +19,12 @@ namespace BookingApi.Domain.Entities
 
             RoomSlotId = roomSlotId;
             UserEmail = userEmail;
+            CreatedAt = now.UtcDateTime;
         }
 
-        public Result EnsureCanBeDeleted()
+        public Result EnsureCanBeDeleted(DateTimeOffset now)
         {
-            if (CreatedAt.AddMinutes(60) < DateTime.UtcNow)
+            if (CreatedAt.AddMinutes(60) < now)
             {
                 return Result.Invalid(new ValidationError("Booking can be deleted only within 60 minutes of creation."));
             }

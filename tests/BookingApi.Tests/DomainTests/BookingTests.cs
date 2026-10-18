@@ -1,4 +1,5 @@
 using BookingApi.Domain.Entities;
+using Microsoft.Extensions.Time.Testing;
 
 namespace BookingApi.Tests.DomainTests
 {
@@ -12,7 +13,7 @@ namespace BookingApi.Tests.DomainTests
             var userEmail = "test@example.com";
 
             // Act
-            var booking = new Booking(roomSlotId, userEmail);
+            var booking = new Booking(roomSlotId, userEmail, DateTimeOffset.UtcNow);
 
             // Assert
             Assert.Equal(roomSlotId, booking.RoomSlotId);
@@ -27,7 +28,7 @@ namespace BookingApi.Tests.DomainTests
             var userEmail = "test@example.com";
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => new Booking(roomSlotId, userEmail));
+            var exception = Assert.Throws<ArgumentException>(() => new Booking(roomSlotId, userEmail, DateTimeOffset.UtcNow));
             Assert.Equal("RoomSlotId cannot be empty. (Parameter 'roomSlotId')", exception.Message);
         }
 
@@ -39,7 +40,7 @@ namespace BookingApi.Tests.DomainTests
             var userEmail = "";
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => new Booking(roomSlotId, userEmail));
+            var exception = Assert.Throws<ArgumentException>(() => new Booking(roomSlotId, userEmail, DateTimeOffset.UtcNow));
             Assert.Equal("UserEmail cannot be empty. (Parameter 'userEmail')", exception.Message);
         }
 
@@ -51,8 +52,9 @@ namespace BookingApi.Tests.DomainTests
             var userEmail = "test@example.com";
 
             // Act
-            var booking = new Booking(roomSlotId, userEmail);
-            var result = booking.EnsureCanBeDeleted();
+            var booking = new Booking(roomSlotId, userEmail, DateTimeOffset.UtcNow);
+            var fakeTime = new FakeTimeProvider(booking.CreatedAt.AddMinutes(30));
+            var result = booking.EnsureCanBeDeleted(fakeTime.GetUtcNow());
 
             // Assert
             Assert.True(result.IsSuccess);
@@ -66,9 +68,9 @@ namespace BookingApi.Tests.DomainTests
             var userEmail = "test@example.com";
 
             // Act
-            var booking = new Booking(roomSlotId, userEmail);
-            booking.GetType().GetProperty("CreatedAt")!.SetValue(booking, DateTime.UtcNow.AddMinutes(-61));
-            var result = booking.EnsureCanBeDeleted();
+            var booking = new Booking(roomSlotId, userEmail, DateTimeOffset.UtcNow);
+            var fakeTime = new FakeTimeProvider(booking.CreatedAt.AddMinutes(61));
+            var result = booking.EnsureCanBeDeleted(fakeTime.GetUtcNow());
 
             // Assert
             Assert.False(result.IsSuccess);

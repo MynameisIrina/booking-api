@@ -1,10 +1,11 @@
 using Ardalis.Result;
 using BookingApi.Application.Repositories;
 using MediatR;
+using System;
 
 namespace BookingApi.Application.UseCases.Bookings.Commands.DeleteBooking
 {
-    public class DeleteBookingCommandHandler(IBookingRepository bookingRepository, IRoomSlotRepository roomSlotRepository) : IRequestHandler<DeleteBookingCommand, Result>
+    public class DeleteBookingCommandHandler(IBookingRepository bookingRepository, IRoomSlotRepository roomSlotRepository, TimeProvider timeProvider) : IRequestHandler<DeleteBookingCommand, Result>
     {
         public async Task<Result> Handle(DeleteBookingCommand request, CancellationToken cancellationToken)
         {
@@ -16,7 +17,7 @@ namespace BookingApi.Application.UseCases.Bookings.Commands.DeleteBooking
             if (roomSlot is null)
                 return Result.NotFound($"Room slot with ID {booking.RoomSlotId} not found.");
 
-            var ensureDeleteResult = booking.EnsureCanBeDeleted();
+            var ensureDeleteResult = booking.EnsureCanBeDeleted(timeProvider.GetUtcNow());
             if (!ensureDeleteResult.IsSuccess)
                 return ensureDeleteResult;
 
