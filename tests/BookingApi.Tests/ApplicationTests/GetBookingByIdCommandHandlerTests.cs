@@ -34,7 +34,7 @@ namespace BookingApi.Tests.ApplicationTests
             Assert.True(result.IsSuccess);
             Assert.Equal(booking.RoomSlotId, result.Value.RoomSlotId);
             Assert.Equal(booking.UserEmail, result.Value.UserEmail);
-            Assert.Equal(booking.CreatedAt, result.Value.Date);
+            Assert.Equal(booking.CreatedAt, result.Value.CreatedAt);
         }
 
         [Fact]

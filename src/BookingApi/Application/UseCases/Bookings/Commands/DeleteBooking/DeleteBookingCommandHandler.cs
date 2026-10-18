@@ -1,7 +1,6 @@
 using Ardalis.Result;
 using BookingApi.Application.Repositories;
 using MediatR;
-using System;
 
 namespace BookingApi.Application.UseCases.Bookings.Commands.DeleteBooking
 {

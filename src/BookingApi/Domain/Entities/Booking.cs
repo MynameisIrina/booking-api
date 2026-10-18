@@ -6,7 +6,7 @@ namespace BookingApi.Domain.Entities
     {
         public Guid RoomSlotId { get; private set; }
         public string UserEmail { get; private set; } = string.Empty;
-        public DateTime CreatedAt { get; private set; }
+        public DateTimeOffset CreatedAt { get; private set; }
 
         private Booking() { }
         public Booking(Guid roomSlotId, string userEmail, DateTimeOffset now)
@@ -24,7 +24,7 @@ namespace BookingApi.Domain.Entities
 
         public Result EnsureCanBeDeleted(DateTimeOffset now)
         {
-            if (CreatedAt.AddMinutes(60) < now)
+            if (CreatedAt.AddMinutes(60) <= now)
             {
                 return Result.Invalid(new ValidationError("Booking can be deleted only within 60 minutes of creation."));
             }

@@ -53,8 +53,7 @@ namespace BookingApi.Tests.DomainTests
 
             // Act
             var booking = new Booking(roomSlotId, userEmail, DateTimeOffset.UtcNow);
-            var fakeTime = new FakeTimeProvider(booking.CreatedAt.AddMinutes(30));
-            var result = booking.EnsureCanBeDeleted(fakeTime.GetUtcNow());
+            var result = booking.EnsureCanBeDeleted(DateTimeOffset.UtcNow);
 
             // Assert
             Assert.True(result.IsSuccess);
@@ -69,8 +68,23 @@ namespace BookingApi.Tests.DomainTests
 
             // Act
             var booking = new Booking(roomSlotId, userEmail, DateTimeOffset.UtcNow);
-            var fakeTime = new FakeTimeProvider(booking.CreatedAt.AddMinutes(61));
-            var result = booking.EnsureCanBeDeleted(fakeTime.GetUtcNow());
+            var result = booking.EnsureCanBeDeleted(booking.CreatedAt.AddMinutes(61));
+
+            // Assert
+            Assert.False(result.IsSuccess);
+            Assert.Equal("Booking can be deleted only within 60 minutes of creation.", result.ValidationErrors.First().ErrorMessage);
+        }
+
+        [Fact]
+        public void Booking_EnsureCanBeDeleted_Exactly60Minutes_ShouldReturnInvalid()
+        {
+            // Arrange
+            var roomSlotId = Guid.CreateVersion7();
+            var userEmail = "test@example.com";
+
+            // Act
+            var booking = new Booking(roomSlotId, userEmail, DateTimeOffset.UtcNow);
+            var result = booking.EnsureCanBeDeleted(booking.CreatedAt.AddMinutes(60));
 
             // Assert
             Assert.False(result.IsSuccess);
