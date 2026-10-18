@@ -80,6 +80,7 @@ namespace BookingApi.Tests.DomainTests
 
             // Assert
             Assert.False(roomSlot.IsBooked);
+            Assert.Null(roomSlot.BookedByEmail);
         }
     }
 }

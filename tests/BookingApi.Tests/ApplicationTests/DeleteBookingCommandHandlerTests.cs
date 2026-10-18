@@ -46,6 +46,7 @@ namespace BookingApi.Tests.ApplicationTests
 
             // Assert
             Assert.True(result.IsSuccess);
+            Assert.True(roomSlot.IsBooked == false);
             bookingRepositoryMock.Verify(r => r.Delete(booking), Times.Once);
         }
 
