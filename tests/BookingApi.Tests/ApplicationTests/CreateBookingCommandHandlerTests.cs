@@ -91,5 +91,29 @@ namespace BookingApi.Tests.ApplicationTests
             Assert.False(secondResult.IsSuccess);
             Assert.Equal(ResultStatus.Conflict, secondResult.Status);
         }
+
+        [Fact]
+        public async Task Handle_RepositoryNotCalledOnConflict_ShouldNotCreateBooking()
+        {
+            // Arrange
+            var roomSlotId = Guid.NewGuid();
+            var userEmail = "test@example.com";
+
+            var roomSlot = new RoomSlot("Conference Room A", DateTime.UtcNow.AddDays(1));
+
+            roomSlotRepositoryMock.Setup(r => r.GetRoomSlotByIdTrackedAsync(roomSlotId))
+                .ReturnsAsync(roomSlot);
+
+            // Act
+            var result = await handler.Handle(new CreateBookingCommand(roomSlotId, userEmail), CancellationToken.None);
+
+            // Act again to simulate a second booking attempt
+            var secondResult = await handler.Handle(new CreateBookingCommand(roomSlotId, userEmail), CancellationToken.None);
+
+            // Assert
+            Assert.False(secondResult.IsSuccess);
+            Assert.Equal(ResultStatus.Conflict, secondResult.Status);
+            bookingRepositoryMock.Verify(r => r.CreateBookingAsync(It.IsAny<Booking>()), Times.Once);
+        }
     }
 }
