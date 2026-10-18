@@ -113,6 +113,7 @@ namespace BookingApi.Tests.ApplicationTests
             // Assert
             Assert.False(secondResult.IsSuccess);
             Assert.Equal(ResultStatus.Conflict, secondResult.Status);
+            bookingRepositoryMock.Verify(r => r.CreateBookingAsync(It.IsAny<Booking>()), Times.Once);
         }
     }
 }

@@ -6,8 +6,8 @@ namespace BookingApi.Tests.IntegrationTests;
 
 /// <summary>
 /// A fixture that sets up a PostgreSQL database container for integration tests and provides a WebApplicationFactory for testing the Booking API.
-/// Classes that implement IClassFixture<DatabaseFixture> will share the same instance of this fixture, allowing them to use the same database container and WebApplicationFactory.
-/// Therefore the database container will be started only once for all tests that use this fixture, and it will be disposed of when all tests are finished.
+/// Classes that implement IClassFixture<DatabaseFixture> will have its own instance, allowing them to use its own database container and WebApplicationFactory .
+/// The database container will be started only once for all tests that use this fixture, and it will be disposed of when all tests are finished.
 /// </summary>
 public class DatabaseFixture : WebApplicationFactory<Program>, IAsyncLifetime
 {

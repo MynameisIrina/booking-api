@@ -1,8 +1,6 @@
-using Testcontainers.PostgreSql;
 using BookingApi.Persistence;
 using Microsoft.EntityFrameworkCore;
 using BookingApi.Domain.Entities;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Json;
 using BookingApi.API.Endpoints.RoomSlots;
@@ -16,9 +14,9 @@ namespace BookingApi.Tests.IntegrationTests
         private readonly DatabaseFixture _sharedContext;
         private HttpClient _client = default!;
 
-        public BookingTests(DatabaseFixture datbaseFixture)
+        public BookingTests(DatabaseFixture databaseFixture)
         {
-            _sharedContext = datbaseFixture;
+            _sharedContext = databaseFixture;
         }
 
         public async Task InitializeAsync()
@@ -106,6 +104,12 @@ namespace BookingApi.Tests.IntegrationTests
 
             Assert.True(response1.IsSuccessStatusCode || response2.IsSuccessStatusCode);
             Assert.True(response1.StatusCode == System.Net.HttpStatusCode.Conflict || response2.StatusCode == System.Net.HttpStatusCode.Conflict);
+            using (var scope = CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
+                var bookingsCount = await dbContext.Bookings.CountAsync(b => b.RoomSlotId == roomSlotId);
+                Assert.Equal(1, bookingsCount);
+            }
         }
 
         [Fact]
