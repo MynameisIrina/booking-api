@@ -53,7 +53,7 @@ namespace BookingApi.Tests.DomainTests
 
             // Act
             var booking = new Booking(roomSlotId, userEmail, DateTimeOffset.UtcNow);
-            var result = booking.EnsureCanBeDeleted(DateTimeOffset.UtcNow);
+            var result = booking.EnsureCanBeDeleted(booking.CreatedAt.AddMinutes(5));
 
             // Assert
             Assert.True(result.IsSuccess);

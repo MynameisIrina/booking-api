@@ -19,7 +19,7 @@ namespace BookingApi.Domain.Entities
 
             RoomSlotId = roomSlotId;
             UserEmail = userEmail;
-            CreatedAt = now.UtcDateTime;
+            CreatedAt = now.ToUniversalTime();
         }
 
         public Result EnsureCanBeDeleted(DateTimeOffset now)
