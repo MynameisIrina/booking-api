@@ -22,7 +22,7 @@ namespace BookingApi.Tests.ApplicationTests
             // Arrange
             var bookingId = Guid.NewGuid();
             var roomSlotId = Guid.NewGuid();
-            var booking = new Booking(roomSlotId, "test@example.com");
+            var booking = new Booking(roomSlotId, "test@example.com", DateTimeOffset.UtcNow);
 
             _bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId))
                 .ReturnsAsync(booking);
@@ -34,7 +34,7 @@ namespace BookingApi.Tests.ApplicationTests
             Assert.True(result.IsSuccess);
             Assert.Equal(booking.RoomSlotId, result.Value.RoomSlotId);
             Assert.Equal(booking.UserEmail, result.Value.UserEmail);
-            Assert.Equal(booking.CreatedAt, result.Value.Date);
+            Assert.Equal(booking.CreatedAt, result.Value.CreatedAt);
         }
 
         [Fact]
