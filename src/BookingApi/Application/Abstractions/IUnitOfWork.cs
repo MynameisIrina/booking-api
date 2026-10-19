@@ -1,4 +1,3 @@
-
 namespace BookingApi.Application.Abstractions;
 
 public interface IUnitOfWork

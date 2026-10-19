@@ -25,6 +25,5 @@ public class SaveChangesBehavior<TRequest, TResponse>(
         logger.LogInformation("Changes saved to the database for request of type {RequestType}", typeof(TRequest).Name);
 
         return response;
-
     }
 }
