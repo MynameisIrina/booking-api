@@ -10,6 +10,7 @@ using BookingApi.Persistence.Repositories;
 using BookingApi.API.Middleware;
 using BookingApi.Application.UseCases.Bookings.Commands.CreateBooking;
 using FluentValidation;
+using BookingApi.Application.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,7 @@ builder.Services.AddDbContext<BookingDbContext>(options => options.UseNpgsql(bui
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IRoomSlotRepository, RoomSlotRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddHealthChecks().AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
