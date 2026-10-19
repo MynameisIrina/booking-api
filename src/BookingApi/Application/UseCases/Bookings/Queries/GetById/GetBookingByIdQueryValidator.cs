@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace BookingApi.Application.UseCases.Bookings.Commands.GetById
+namespace BookingApi.Application.UseCases.Bookings.Queries.GetById
 {
-    public class GetBookingByIdCommandValidator : AbstractValidator<GetBookingByIdCommand>
+    public class GetBookingByIdQueryValidator : AbstractValidator<GetBookingByIdQuery>
     {
-        public GetBookingByIdCommandValidator()
+        public GetBookingByIdQueryValidator()
         {
             RuleFor(x => x.Id)
                 .NotEmpty().WithMessage("Id is required.")

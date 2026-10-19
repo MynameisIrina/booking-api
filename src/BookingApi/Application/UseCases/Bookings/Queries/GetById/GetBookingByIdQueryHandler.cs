@@ -2,11 +2,11 @@ using Ardalis.Result;
 using BookingApi.Application.Repositories;
 using MediatR;
 
-namespace BookingApi.Application.UseCases.Bookings.Commands.GetById
+namespace BookingApi.Application.UseCases.Bookings.Queries.GetById
 {
-    public class GetBookingByIdCommandHandler(IBookingRepository bookingRepository) : IRequestHandler<GetBookingByIdCommand, Result<BookingDto>>
+    public class GetBookingByIdQueryHandler(IBookingRepository bookingRepository) : IRequestHandler<GetBookingByIdQuery, Result<BookingDto>>
     {
-        public async Task<Result<BookingDto>> Handle(GetBookingByIdCommand request, CancellationToken cancellationToken)
+        public async Task<Result<BookingDto>> Handle(GetBookingByIdQuery request, CancellationToken cancellationToken)
         {
             var booking = await bookingRepository.GetByIdAsync(request.Id);
             if (booking is null)

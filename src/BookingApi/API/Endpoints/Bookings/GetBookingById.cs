@@ -1,5 +1,5 @@
 using BookingApi.API.Extensions;
-using BookingApi.Application.UseCases.Bookings.Commands.GetById;
+using BookingApi.Application.UseCases.Bookings.Queries.GetById;
 using FastEndpoints;
 using MediatR;
 
@@ -15,7 +15,7 @@ namespace BookingApi.API.Endpoints.Bookings
 
         public override async Task HandleAsync(GetBookingRequest request, CancellationToken ct)
         {
-            var result = await mediator.Send(new GetBookingByIdCommand(request.Id), ct);
+            var result = await mediator.Send(new GetBookingByIdQuery(request.Id), ct);
 
             if (!result.IsSuccess)
             {

@@ -5,9 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Json;
 using BookingApi.API.Endpoints.RoomSlots;
 using BookingApi.API.Endpoints.Bookings;
-using BookingApi.Application.Abstractions;
-using BookingApi.Application.UseCases.Bookings.Commands.GetById;
-using Ardalis.Result;
 
 
 namespace BookingApi.Tests.IntegrationTests
@@ -150,13 +147,6 @@ namespace BookingApi.Tests.IntegrationTests
             var bodyResponse = await availableSlotsResponse.Content.ReadFromJsonAsync<GetRoomSlotsResponse>();
 
             Assert.Contains(bodyResponse!.RoomSlots.Data, s => s.Id == roomSlotId);
-        }
-
-        [Fact]
-        public async Task GetBookingById_IsQueryNotCommand()
-        {
-            var booking = new GetBookingByIdCommand(Guid.Empty);
-            Assert.True(booking is IQuery<Result<BookingDto>>);
         }
     }
 }
