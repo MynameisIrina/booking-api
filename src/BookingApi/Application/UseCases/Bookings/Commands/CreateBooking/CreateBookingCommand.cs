@@ -1,7 +1,6 @@
 using Ardalis.Result;
 using BookingApi.Application.Abstractions;
 
-namespace BookingApi.Application.UseCases.Bookings.Commands.CreateBooking
-{
-    public sealed record CreateBookingCommand(Guid RoomSlotId, string UserEmail) : ICommand<Result<Guid>>;
-}
+namespace BookingApi.Application.UseCases.Bookings.Commands.CreateBooking;
+
+public sealed record CreateBookingCommand(Guid RoomSlotId, string UserEmail) : ICommand<Result<Guid>>;

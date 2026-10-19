@@ -3,39 +3,38 @@ using BookingApi.Application.UseCases.Bookings.Queries.GetById;
 using FastEndpoints;
 using MediatR;
 
-namespace BookingApi.API.Endpoints.Bookings
+namespace BookingApi.API.Endpoints.Bookings;
+
+public class GetBookingById(IMediator mediator) : Endpoint<GetBookingRequest, GetBookingResponse>
 {
-    public class GetBookingById(IMediator mediator) : Endpoint<GetBookingRequest, GetBookingResponse>
+    public override void Configure()
     {
-        public override void Configure()
-        {
-            Get("/bookings/{Id}");
-            AllowAnonymous();
-        }
+        Get("/bookings/{Id}");
+        AllowAnonymous();
+    }
 
-        public override async Task HandleAsync(GetBookingRequest request, CancellationToken ct)
-        {
-            var result = await mediator.Send(new GetBookingByIdQuery(request.Id), ct);
+    public override async Task HandleAsync(GetBookingRequest request, CancellationToken ct)
+    {
+        var result = await mediator.Send(new GetBookingByIdQuery(request.Id), ct);
 
-            if (!result.IsSuccess)
+        if (!result.IsSuccess)
+        {
+            foreach (var error in result.ValidationErrors)
             {
-                foreach (var error in result.ValidationErrors)
-                {
-                    AddError(error.ErrorMessage);
-                }
-                await Send.ErrorsAsync(result.Status.ToHttpStatusCode(), cancellation: ct);
-                return;
+                AddError(error.ErrorMessage);
             }
-
-            var response = new GetBookingResponse(result.Value);
-            await Send.OkAsync(response, cancellation: ct);
+            await Send.ErrorsAsync(result.Status.ToHttpStatusCode(), cancellation: ct);
+            return;
         }
-    }
 
-    public sealed record GetBookingRequest
-    {
-        public Guid Id { get; init; }
+        var response = new GetBookingResponse(result.Value);
+        await Send.OkAsync(response, cancellation: ct);
     }
-
-    public sealed record GetBookingResponse(BookingDto booking);
 }
+
+public sealed record GetBookingRequest
+{
+    public Guid Id { get; init; }
+}
+
+public sealed record GetBookingResponse(BookingDto booking);
