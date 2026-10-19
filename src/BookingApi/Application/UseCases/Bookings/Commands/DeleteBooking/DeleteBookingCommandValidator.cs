@@ -1,13 +1,12 @@
 using FluentValidation;
 
-namespace BookingApi.Application.UseCases.Bookings.Commands.DeleteBooking
+namespace BookingApi.Application.UseCases.Bookings.Commands.DeleteBooking;
+
+public class DeleteBookingCommandValidator : AbstractValidator<DeleteBookingCommand>
 {
-    public class DeleteBookingCommandValidator : AbstractValidator<DeleteBookingCommand>
+    public DeleteBookingCommandValidator()
     {
-        public DeleteBookingCommandValidator()
-        {
-            RuleFor(x => x.Id)
-                .NotEmpty().WithMessage("Booking Id is required.");
-        }
+        RuleFor(x => x.Id)
+            .NotEmpty().WithMessage("Booking Id is required.");
     }
 }

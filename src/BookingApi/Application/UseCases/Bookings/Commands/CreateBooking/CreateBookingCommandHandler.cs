@@ -3,26 +3,25 @@ using BookingApi.Application.Repositories;
 using BookingApi.Domain.Entities;
 using MediatR;
 
-namespace BookingApi.Application.UseCases.Bookings.Commands.CreateBooking
+namespace BookingApi.Application.UseCases.Bookings.Commands.CreateBooking;
+
+public class CreateBookingCommandHandler(IBookingRepository bookingRepository, IRoomSlotRepository roomSlotRepository, ILogger<CreateBookingCommandHandler> logger, TimeProvider timeProvider) : IRequestHandler<CreateBookingCommand, Result<Guid>>
 {
-    public class CreateBookingCommandHandler(IBookingRepository bookingRepository, IRoomSlotRepository roomSlotRepository, ILogger<CreateBookingCommandHandler> logger, TimeProvider timeProvider) : IRequestHandler<CreateBookingCommand, Result<Guid>>
+    public async Task<Result<Guid>> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
     {
-        public async Task<Result<Guid>> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
-        {
-            var roomSlot = await roomSlotRepository.GetRoomSlotByIdTrackedAsync(request.RoomSlotId);
-            if (roomSlot is null)
-                return Result<Guid>.NotFound($"Room slot with ID {request.RoomSlotId} not found.");
+        var roomSlot = await roomSlotRepository.GetRoomSlotByIdTrackedAsync(request.RoomSlotId);
+        if (roomSlot is null)
+            return Result<Guid>.NotFound($"Room slot with ID {request.RoomSlotId} not found.");
 
-            var booking = new Booking(request.RoomSlotId, request.UserEmail, timeProvider.GetUtcNow());
-            var bookResult = roomSlot.Book(request.UserEmail);
-            if (!bookResult.IsSuccess)
-                return Result<Guid>.Conflict(bookResult.Errors.ToArray());
+        var booking = new Booking(request.RoomSlotId, request.UserEmail, timeProvider.GetUtcNow());
+        var bookResult = roomSlot.Book(request.UserEmail);
+        if (!bookResult.IsSuccess)
+            return Result<Guid>.Conflict(bookResult.Errors.ToArray());
 
-            await bookingRepository.CreateBookingAsync(booking);
+        await bookingRepository.CreateBookingAsync(booking);
 
-            logger.LogInformation("User booking created for slot {RoomSlotId}", request.RoomSlotId);
+        logger.LogInformation("User booking created for slot {RoomSlotId}", request.RoomSlotId);
 
-            return Result<Guid>.Success(booking.Id);
-        }
+        return Result<Guid>.Success(booking.Id);
     }
 }

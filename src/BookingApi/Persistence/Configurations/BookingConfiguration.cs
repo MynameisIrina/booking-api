@@ -2,17 +2,16 @@ using BookingApi.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BookingApi.Persistence.Configurations
+namespace BookingApi.Persistence.Configurations;
+
+public class BookingConfiguration : IEntityTypeConfiguration<Booking>
 {
-    public class BookingConfiguration : IEntityTypeConfiguration<Booking>
+    public void Configure(EntityTypeBuilder<Booking> builder)
     {
-        public void Configure(EntityTypeBuilder<Booking> builder)
-        {
-            builder.Property(x => x.Xmin)
-                .IsRowVersion()
-                .HasColumnName("xmin")
-                .HasColumnType("xid")
-                .ValueGeneratedOnAddOrUpdate();
-        }
+        builder.Property(x => x.Xmin)
+            .IsRowVersion()
+            .HasColumnName("xmin")
+            .HasColumnType("xid")
+            .ValueGeneratedOnAddOrUpdate();
     }
 }

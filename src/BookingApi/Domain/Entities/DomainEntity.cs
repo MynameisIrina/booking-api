@@ -1,9 +1,8 @@
-namespace BookingApi.Domain.Entities
-{
-    public abstract class DomainEntity
-    {
-        public Guid Id { get; set; } = Guid.NewGuid();
+namespace BookingApi.Domain.Entities;
 
-        public uint Xmin { get; set; }
-    }
+public abstract class DomainEntity
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+
+    public uint Xmin { get; set; }
 }
