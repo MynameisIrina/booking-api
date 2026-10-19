@@ -1,19 +1,21 @@
+using Ardalis.Result;
+using BookingApi.Application.Abstractions;
 using BookingApi.Application.Repositories;
-using BookingApi.Application.UseCases.Bookings.Commands.GetById;
+using BookingApi.Application.UseCases.Bookings.Queries.GetById;
 using BookingApi.Domain.Entities;
 using Moq;
 
 namespace BookingApi.Tests.ApplicationTests
 {
-    public class GetBookingByIdCommandHandlerTests
+    public class GetBookingByIdQueryHandlerTests
     {
-        private readonly GetBookingByIdCommandHandler _handler;
+        private readonly GetBookingByIdQueryHandler _handler;
         private Mock<IBookingRepository> _bookingRepositoryMock;
 
-        public GetBookingByIdCommandHandlerTests()
+        public GetBookingByIdQueryHandlerTests()
         {
             _bookingRepositoryMock = new Mock<IBookingRepository>();
-            _handler = new GetBookingByIdCommandHandler(_bookingRepositoryMock.Object);
+            _handler = new GetBookingByIdQueryHandler(_bookingRepositoryMock.Object);
         }
 
         [Fact]
@@ -28,7 +30,7 @@ namespace BookingApi.Tests.ApplicationTests
                 .ReturnsAsync(booking);
 
             // Act
-            var result = await _handler.Handle(new GetBookingByIdCommand(bookingId), CancellationToken.None);
+            var result = await _handler.Handle(new GetBookingByIdQuery(bookingId), CancellationToken.None);
 
             // Assert
             Assert.True(result.IsSuccess);
@@ -47,11 +49,18 @@ namespace BookingApi.Tests.ApplicationTests
                 .ReturnsAsync((Booking?)null);
 
             // Act
-            var result = await _handler.Handle(new GetBookingByIdCommand(bookingId), CancellationToken.None);
+            var result = await _handler.Handle(new GetBookingByIdQuery(bookingId), CancellationToken.None);
 
             // Assert
             Assert.False(result.IsSuccess);
             Assert.Equal(Ardalis.Result.ResultStatus.NotFound, result.Status);
+        }
+
+        [Fact]
+        public void GetBookingById_IsQueryNotCommand()
+        {
+            var booking = new GetBookingByIdQuery(Guid.Empty);
+            Assert.False(booking is ICommand<Result<BookingDto>>);
         }
     }
 }
