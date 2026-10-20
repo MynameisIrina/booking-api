@@ -13,7 +13,7 @@ Built as a learning project to practice production-grade .NET backend developmen
 - **FluentValidation** — request validation
 - **Serilog** — structured JSON logging
 - **Testcontainers** — integration tests with real PostgreSQL
-- **Docker + Railway** — containerization and deployment
+- **Docker** — containerization
 
 ## Architecture Decisions
 
@@ -31,7 +31,7 @@ Endpoints only send a command through MediatR and never call handlers directly.
 **Optimistic Concurrency via xmin** — protects against race conditions when two users
 attempt to book the same slot simultaneously. PostgreSQL xmin is used as a concurrency
 token. On conflict, EF Core throws DbUpdateConcurrencyException which is handled
-in the command handler and returned as a 409 Conflict.
+in the global exception handler and returned as a 409 Conflict.
 
 **GlobalExceptionHandler** — centralized exception handling with proper HTTP status
 code mapping.
