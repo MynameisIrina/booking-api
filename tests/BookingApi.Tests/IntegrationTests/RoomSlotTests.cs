@@ -9,7 +9,6 @@ namespace BookingApi.Tests.IntegrationTests;
 public class RoomSlotTests(DatabaseFixture databaseFixture) : IClassFixture<DatabaseFixture>, IAsyncLifetime
 {
     private readonly DatabaseFixture sharedContext = databaseFixture;
-    private HttpClient client = default!;
 
     public Task DisposeAsync()
     {
@@ -20,13 +19,12 @@ public class RoomSlotTests(DatabaseFixture databaseFixture) : IClassFixture<Data
     {
         using var scope = CreateScope();
         await scope.ServiceProvider.GetRequiredService<BookingDbContext>().Database.ExecuteSqlRawAsync("TRUNCATE TABLE \"Bookings\", \"RoomSlots\";");
-        client = sharedContext.CreateClient();
     }
 
     private IServiceScope CreateScope() => sharedContext.Services.CreateScope();
 
     [Fact]
-    public async Task TwoConcurrentCreateCommandsWithSameNameAndDate_ShouldReturnConflict()
+    public async Task AddSameRoomSlotsToDb_ShouldReturnDbUpdateException()
     {
         DateTime now = DateTime.UtcNow;
         using (var scope = CreateScope())
