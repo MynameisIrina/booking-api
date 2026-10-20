@@ -46,6 +46,8 @@ namespace BookingApi.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RoomSlotId");
+
                     b.ToTable("Bookings");
                 });
 
@@ -80,6 +82,15 @@ namespace BookingApi.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("RoomSlots");
+                });
+
+            modelBuilder.Entity("BookingApi.Domain.Entities.Booking", b =>
+                {
+                    b.HasOne("BookingApi.Domain.Entities.RoomSlot", null)
+                        .WithMany()
+                        .HasForeignKey("RoomSlotId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
