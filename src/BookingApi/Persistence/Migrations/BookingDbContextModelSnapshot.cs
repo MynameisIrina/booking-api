@@ -28,7 +28,7 @@ namespace BookingApi.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("RoomSlotId")
@@ -75,6 +75,9 @@ namespace BookingApi.Persistence.Migrations
                         .HasColumnName("xmin");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoomName", "SlotDate")
+                        .IsUnique();
 
                     b.ToTable("RoomSlots");
                 });

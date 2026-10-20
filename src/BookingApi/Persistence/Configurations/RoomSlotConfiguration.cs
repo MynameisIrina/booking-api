@@ -13,6 +13,8 @@ public class RoomSlotConfiguration : IEntityTypeConfiguration<RoomSlot>
             .HasColumnName("xmin")
             .HasColumnType("xid")
             .ValueGeneratedOnAddOrUpdate();
-
+        
+        builder.HasIndex(x => new {x.RoomName, x.SlotDate})
+            .IsUnique();
     }
 }

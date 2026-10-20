@@ -10,5 +10,4 @@ public interface IRoomSlotRepository
     public Task<RoomSlot?> GetRoomSlotByNameAndDateAsync(string roomName, DateTime slotDate);
     public Task<RoomSlot?> GetRoomSlotByIdTrackedAsync(Guid roomSlotId);
     public Task UpdateRoomSlotAsync(RoomSlot roomSlot);
-    public Task SaveChangesAsync();
 }
