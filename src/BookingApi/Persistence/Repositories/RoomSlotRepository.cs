@@ -26,7 +26,7 @@ public class RoomSlotRepository(BookingDbContext dbContext) : IRoomSlotRepositor
             .ToPageResponseAsync(request.Page, request.PageSize);
     }
 
-    public Task<Guid> CreateRoomSlot(RoomSlot roomSlot)
+    public Task<Guid> CreateRoomSlotAsync(RoomSlot roomSlot)
     {
         dbContext.RoomSlots.Add(roomSlot);
         return Task.FromResult(roomSlot.Id);

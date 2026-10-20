@@ -18,7 +18,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "Unauthorized", "You are not authorized to perform this action."),
             DbUpdateConcurrencyException => (StatusCodes.Status409Conflict, "Conflict", "The resource was modified by another request. Please retry."),
             DbUpdateException { InnerException: PostgresException { SqlState: PostgresErrorCodes.UniqueViolation } } => (StatusCodes.Status409Conflict, "Conflict", "A resource with the same unique value already exists."),
-            _ => (StatusCodes.Status500InternalServerError, "Internal Server Error", "An unexpected error occurred during.")
+            _ => (StatusCodes.Status500InternalServerError, "Internal Server Error", "An unexpected error occurred.")
         };
 
         if (statusCode == StatusCodes.Status500InternalServerError)

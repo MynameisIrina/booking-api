@@ -5,7 +5,7 @@ namespace BookingApi.Application.Repositories;
 
 public interface IRoomSlotRepository
 {
-    public Task<Guid> CreateRoomSlot(RoomSlot roomSlot);
+    public Task<Guid> CreateRoomSlotAsync(RoomSlot roomSlot);
     public Task<PagedResponse<RoomSlot>> GetAvailableRoomSlotsAsync(PagedRequest request);
     public Task<RoomSlot?> GetRoomSlotByNameAndDateAsync(string roomName, DateTime slotDate);
     public Task<RoomSlot?> GetRoomSlotByIdTrackedAsync(Guid roomSlotId);

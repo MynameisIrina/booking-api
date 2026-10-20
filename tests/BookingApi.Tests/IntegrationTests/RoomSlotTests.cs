@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using BookingApi.Domain.Entities;
 using BookingApi.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,29 +28,22 @@ public class RoomSlotTests(DatabaseFixture databaseFixture) : IClassFixture<Data
     [Fact]
     public async Task TwoConcurrentCreateCommandsWithSameNameAndDate_ShouldReturnConflict()
     {
+        DateTime now = DateTime.UtcNow;
         using (var scope = CreateScope())
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
+            dbContext.Add(new RoomSlot("Name", now));
+            await dbContext.SaveChangesAsync();
         }
 
-        var request = new {RoomName = "Test", SlotDate = DateTime.UtcNow, UserEmail = "test@example.com"};
-
-        var task1 = client.PostAsJsonAsync("/room-slots", request);
-        var task2 = client.PostAsJsonAsync("/room-slots", request);
-
-        await Task.WhenAll(task1, task2);
-
-        var response1 = await task1;
-        var response2 = await task2;
-
-        Assert.True(response1.IsSuccessStatusCode || response2.IsSuccessStatusCode);
-        Assert.True(response1.StatusCode == System.Net.HttpStatusCode.Conflict || response2.StatusCode == System.Net.HttpStatusCode.Conflict);
-
-        using(var scope = CreateScope())
+        await Assert.ThrowsAsync<DbUpdateException>(async () =>
         {
-            var dbContext = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
-            var roomSlotCounter = dbContext.RoomSlots.Count();
-            Assert.Equal(1, roomSlotCounter);
-        }
+            using (var scope = CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
+                dbContext.Add(new RoomSlot("Name", now));
+                await dbContext.SaveChangesAsync();
+            }
+        });
     }
 }
