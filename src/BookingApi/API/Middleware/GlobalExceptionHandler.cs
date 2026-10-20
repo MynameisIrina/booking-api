@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace BookingApi.API.Middleware;
 
@@ -16,6 +17,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             KeyNotFoundException => (StatusCodes.Status404NotFound, "Not Found"),
             UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "Unauthorized"),
             DbUpdateConcurrencyException => (StatusCodes.Status409Conflict, "Conflict"),
+            DbUpdateException { InnerException: PostgresException {SqlState : PostgresErrorCodes.UniqueViolation}} => (StatusCodes.Status409Conflict, "Conflict"),
             _ => (StatusCodes.Status500InternalServerError, "Internal Server Error")
         };
 
