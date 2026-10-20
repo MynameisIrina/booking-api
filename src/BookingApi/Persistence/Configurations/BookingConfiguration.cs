@@ -13,5 +13,10 @@ public class BookingConfiguration : IEntityTypeConfiguration<Booking>
             .HasColumnName("xmin")
             .HasColumnType("xid")
             .ValueGeneratedOnAddOrUpdate();
+        
+        builder.HasOne<RoomSlot>()
+            .WithMany()
+            .HasForeignKey(x => x.RoomSlotId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
