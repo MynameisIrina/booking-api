@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using BookingApi.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -17,6 +16,5 @@ public class RoomSlotConfiguration : IEntityTypeConfiguration<RoomSlot>
         
         builder.HasIndex(x => new {x.RoomName, x.SlotDate})
             .IsUnique();
-
     }
 }

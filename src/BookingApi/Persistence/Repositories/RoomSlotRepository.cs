@@ -26,10 +26,10 @@ public class RoomSlotRepository(BookingDbContext dbContext) : IRoomSlotRepositor
             .ToPageResponseAsync(request.Page, request.PageSize);
     }
 
-    public async Task<Guid> CreateRoomSlotAsync(RoomSlot roomSlot)
+    public Task<Guid> CreateRoomSlot(RoomSlot roomSlot)
     {
         dbContext.RoomSlots.Add(roomSlot);
-        return roomSlot.Id;
+        return Task.FromResult(roomSlot.Id);
     }
 
     public async Task<RoomSlot?> GetRoomSlotByNameAndDateAsync(string roomName, DateTime slotDate)
