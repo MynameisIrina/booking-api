@@ -4,8 +4,6 @@
 REST API for managing room slot bookings.
 Built as a learning project to practice production-grade .NET backend development.
 
-**Live demo:** https://booking-api-production-3593.up.railway.app/scalar/v1
-
 ## Tech Stack
 - **ASP.NET Core (.NET 10)** — web framework
 - **EF Core + PostgreSQL** — ORM and database
