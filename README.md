@@ -53,7 +53,7 @@ API available at `http://localhost:8080/scalar/v1`
 **Bookings**
 - `POST /bookings/create` — create a booking
 - `GET /bookings/{id}` — get booking by ID
-- `DELETE /bookings/{id}` — cancel a booking (not allowed after 24 hours from creation)
+- `DELETE /bookings/{id}` — cancel a booking (not allowed after 60 minutes from creation)
 
 **Room Slots**
 - `GET /room-slots/available` — list available slots with pagination
