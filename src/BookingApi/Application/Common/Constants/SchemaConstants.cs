@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BookingApi.Application.Common;
+namespace BookingApi.Application.Common.Constants;
 
 public static class SchemaConstants
 {

@@ -13,9 +13,10 @@ public class RoomSlotRepository(BookingDbContext dbContext) : IRoomSlotRepositor
         return dbContext.RoomSlots.FirstOrDefaultAsync(rs => rs.Id == roomSlotId, cancellationToken);
     }
 
-    public async Task UpdateRoomSlotAsync(RoomSlot roomSlot, CancellationToken cancellationToken)
+    public Task<Guid> UpdateRoomSlotAsync(RoomSlot roomSlot, CancellationToken cancellationToken)
     {
         dbContext.RoomSlots.Update(roomSlot);
+        return Task.FromResult(roomSlot.Id);
     }
 
     public async Task<PagedResponse<RoomSlot>> GetAvailableRoomSlotsAsync(PagedRequest request, CancellationToken cancellationToken)
