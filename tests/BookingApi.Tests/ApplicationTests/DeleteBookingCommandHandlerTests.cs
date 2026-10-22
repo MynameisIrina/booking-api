@@ -36,13 +36,13 @@ public class DeleteBookingCommandHandlerTests
         roomSlot.Book(booking.UserEmail);
         fakeTimeProvider.SetUtcNow(booking.CreatedAt.AddMinutes(30));
 
-        bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId))
+        bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(booking);
         
-        roomSlotRepositoryMock.Setup(r => r.GetRoomSlotByIdTrackedAsync(roomSlotId))
+        roomSlotRepositoryMock.Setup(r => r.GetRoomSlotByIdTrackedAsync(roomSlotId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(roomSlot);
         
-        bookingRepositoryMock.Setup(r => r.Delete(booking))
+        bookingRepositoryMock.Setup(r => r.Delete(booking, It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         // Act
@@ -51,7 +51,7 @@ public class DeleteBookingCommandHandlerTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.False(roomSlot.IsBooked);
-        bookingRepositoryMock.Verify(r => r.Delete(booking), Times.Once);
+        bookingRepositoryMock.Verify(r => r.Delete(booking, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public class DeleteBookingCommandHandlerTests
         // Arrange
         var bookingId = Guid.NewGuid();
 
-        bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId))
+        bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Booking?)null);
 
         // Act
@@ -83,13 +83,13 @@ public class DeleteBookingCommandHandlerTests
         // Simulate a booking that cannot be deleted
         fakeTimeProvider.SetUtcNow(booking.CreatedAt.AddMinutes(120));
 
-        bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId))
+        bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(booking);
 
-        bookingRepositoryMock.Setup(r => r.Delete(booking))
+        bookingRepositoryMock.Setup(r => r.Delete(booking, It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
-        roomSlotRepositoryMock.Setup(r => r.GetRoomSlotByIdTrackedAsync(roomSlotId))
+        roomSlotRepositoryMock.Setup(r => r.GetRoomSlotByIdTrackedAsync(roomSlotId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(roomSlot);
 
         // Act

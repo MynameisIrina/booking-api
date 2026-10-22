@@ -9,7 +9,7 @@ public class CreateBookingCommandHandler(IBookingRepository bookingRepository, I
 {
     public async Task<Result<Guid>> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
     {
-        var roomSlot = await roomSlotRepository.GetRoomSlotByIdTrackedAsync(request.RoomSlotId);
+        var roomSlot = await roomSlotRepository.GetRoomSlotByIdTrackedAsync(request.RoomSlotId, cancellationToken);
         if (roomSlot is null)
             return Result<Guid>.NotFound($"Room slot with ID {request.RoomSlotId} not found.");
 
@@ -18,7 +18,7 @@ public class CreateBookingCommandHandler(IBookingRepository bookingRepository, I
         if (!bookResult.IsSuccess)
             return Result<Guid>.Conflict(bookResult.Errors.ToArray());
 
-        await bookingRepository.CreateBookingAsync(booking);
+        await bookingRepository.CreateBookingAsync(booking, cancellationToken);
 
         logger.LogInformation("User booking created for slot {RoomSlotId}", request.RoomSlotId);
 

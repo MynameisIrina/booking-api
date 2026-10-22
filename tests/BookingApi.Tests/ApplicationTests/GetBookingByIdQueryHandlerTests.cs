@@ -26,7 +26,7 @@ public class GetBookingByIdQueryHandlerTests
         var roomSlotId = Guid.NewGuid();
         var booking = new Booking(roomSlotId, "test@example.com", DateTimeOffset.UtcNow);
 
-        _bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId))
+        _bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(booking);
 
         // Act
@@ -45,7 +45,7 @@ public class GetBookingByIdQueryHandlerTests
         // Arrange
         var bookingId = Guid.NewGuid();
 
-        _bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId))
+        _bookingRepositoryMock.Setup(r => r.GetByIdAsync(bookingId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Booking?)null);
 
         // Act

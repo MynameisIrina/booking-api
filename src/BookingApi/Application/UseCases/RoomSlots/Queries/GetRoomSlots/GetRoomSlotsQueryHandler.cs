@@ -9,7 +9,7 @@ public class GetRoomSlotsQueryHandler(IRoomSlotRepository roomSlotRepository) : 
 {
     public async Task<Result<PagedResponse<RoomSlotDto>>> Handle(GetRoomSlotsQuery request, CancellationToken cancellationToken)
     {
-        var roomSlots = await roomSlotRepository.GetAvailableRoomSlotsAsync(request.PagedRequest);
+        var roomSlots = await roomSlotRepository.GetAvailableRoomSlotsAsync(request.PagedRequest, cancellationToken);
 
         var roomSlotsDtos = roomSlots.Data.Select(rs => new RoomSlotDto(rs.Id, rs.RoomName, rs.SlotDate)).ToList();
         var pagedResponse = new PagedResponse<RoomSlotDto>

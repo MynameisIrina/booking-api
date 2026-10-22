@@ -29,12 +29,12 @@ public class CreateBookingCommandHandlerTests
 
         var roomSlot = new RoomSlot("Conference Room A", DateTime.UtcNow.AddDays(1));
 
-        roomSlotRepositoryMock.Setup(r => r.GetRoomSlotByIdTrackedAsync(roomSlotId))
+        roomSlotRepositoryMock.Setup(r => r.GetRoomSlotByIdTrackedAsync(roomSlotId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(roomSlot);
 
         Booking? capturedBooking = null;
-        bookingRepositoryMock.Setup(r => r.CreateBookingAsync(It.IsAny<Booking>()))
-            .Callback<Booking>(b => capturedBooking = b)
+        bookingRepositoryMock.Setup(r => r.CreateBookingAsync(It.IsAny<Booking>(), It.IsAny<CancellationToken>()))
+            .Callback<Booking, CancellationToken>((b, _) => capturedBooking = b)
             .Returns(Task.CompletedTask);
 
         // Act
@@ -53,7 +53,7 @@ public class CreateBookingCommandHandlerTests
         var roomSlotId = Guid.NewGuid();
         var userEmail = "test@example.com";
 
-        roomSlotRepositoryMock.Setup(r => r.GetRoomSlotByIdTrackedAsync(roomSlotId))
+        roomSlotRepositoryMock.Setup(r => r.GetRoomSlotByIdTrackedAsync(roomSlotId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((RoomSlot?)null);
 
         // Act
@@ -73,12 +73,12 @@ public class CreateBookingCommandHandlerTests
 
         var roomSlot = new RoomSlot("Conference Room A", DateTime.UtcNow.AddDays(1));
 
-        roomSlotRepositoryMock.Setup(r => r.GetRoomSlotByIdTrackedAsync(roomSlotId))
+        roomSlotRepositoryMock.Setup(r => r.GetRoomSlotByIdTrackedAsync(roomSlotId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(roomSlot);
 
         Booking? capturedBooking = null;
-        bookingRepositoryMock.Setup(r => r.CreateBookingAsync(It.IsAny<Booking>()))
-            .Callback<Booking>(b => capturedBooking = b)
+        bookingRepositoryMock.Setup(r => r.CreateBookingAsync(It.IsAny<Booking>(), It.IsAny<CancellationToken>()))
+            .Callback<Booking, CancellationToken>((b, _) => capturedBooking = b)
             .Returns(Task.CompletedTask);
 
         // Act
@@ -101,7 +101,7 @@ public class CreateBookingCommandHandlerTests
 
         var roomSlot = new RoomSlot("Conference Room A", DateTime.UtcNow.AddDays(1));
 
-        roomSlotRepositoryMock.Setup(r => r.GetRoomSlotByIdTrackedAsync(roomSlotId))
+        roomSlotRepositoryMock.Setup(r => r.GetRoomSlotByIdTrackedAsync(roomSlotId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(roomSlot);
 
         // Act
@@ -113,6 +113,6 @@ public class CreateBookingCommandHandlerTests
         // Assert
         Assert.False(secondResult.IsSuccess);
         Assert.Equal(ResultStatus.Conflict, secondResult.Status);
-        bookingRepositoryMock.Verify(r => r.CreateBookingAsync(It.IsAny<Booking>()), Times.Once);
+        bookingRepositoryMock.Verify(r => r.CreateBookingAsync(It.IsAny<Booking>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

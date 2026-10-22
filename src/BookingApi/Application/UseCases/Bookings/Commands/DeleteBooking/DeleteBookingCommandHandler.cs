@@ -8,11 +8,11 @@ public class DeleteBookingCommandHandler(IBookingRepository bookingRepository, I
 {
     public async Task<Result> Handle(DeleteBookingCommand request, CancellationToken cancellationToken)
     {
-        var booking = await bookingRepository.GetByIdAsync(request.Id);
+        var booking = await bookingRepository.GetByIdAsync(request.Id, cancellationToken);
         if (booking is null)
             return Result.NotFound();
 
-        var roomSlot = await roomSlotRepository.GetRoomSlotByIdTrackedAsync(booking.RoomSlotId);
+        var roomSlot = await roomSlotRepository.GetRoomSlotByIdTrackedAsync(booking.RoomSlotId, cancellationToken);
         if (roomSlot is null)
             return Result.NotFound($"Room slot with ID {booking.RoomSlotId} not found.");
 
@@ -24,7 +24,7 @@ public class DeleteBookingCommandHandler(IBookingRepository bookingRepository, I
         if (!freeUpResult.IsSuccess)
             return freeUpResult;
 
-        await bookingRepository.Delete(booking);
+        await bookingRepository.Delete(booking, cancellationToken);
         return Result.Success();
     }
 }

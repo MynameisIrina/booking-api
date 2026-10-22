@@ -28,7 +28,7 @@ public class CreateBooking(IMediator mediator) : Endpoint<CreateBookingRequest, 
 
         var response = new CreateBookingResponse(result.Value);
 
-        await Send.CreatedAtAsync<CreateBooking>(request, response, cancellation: ct);
+        await Send.CreatedAtAsync<GetBookingById>(new { Id = result.Value }, response, cancellation: ct);
     }
 }
 

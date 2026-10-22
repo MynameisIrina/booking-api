@@ -8,7 +8,7 @@ public class GetBookingByIdQueryHandler(IBookingRepository bookingRepository) : 
 {
     public async Task<Result<BookingDto>> Handle(GetBookingByIdQuery request, CancellationToken cancellationToken)
     {
-        var booking = await bookingRepository.GetByIdAsync(request.Id);
+        var booking = await bookingRepository.GetByIdAsync(request.Id, cancellationToken);
         if (booking is null)
         {
             return Result<BookingDto>.NotFound("Booking was not found.");
