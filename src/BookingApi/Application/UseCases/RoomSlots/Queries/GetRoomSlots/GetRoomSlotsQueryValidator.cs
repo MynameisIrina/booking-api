@@ -1,3 +1,4 @@
+using BookingApi.Application.Common;
 using FluentValidation;
 
 namespace BookingApi.Application.UseCases.Bookings.Queries.GetRoomSlots;
@@ -10,6 +11,6 @@ public class GetRoomSlotsQueryValidator : AbstractValidator<GetRoomSlotsQuery>
             .GreaterThan(0).WithMessage("Page must be greater than 0.");
 
         RuleFor(x => x.PagedRequest.PageSize)
-            .GreaterThan(0).WithMessage("PageSize must be greater than 0.");
+            .GreaterThan(0).LessThan(SchemaConstants.MAX_PAGE_SIZE).WithMessage("PageSize must be greater than 0 and less than 50.");
     }
 }

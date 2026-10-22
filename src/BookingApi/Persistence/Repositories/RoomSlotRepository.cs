@@ -23,6 +23,8 @@ public class RoomSlotRepository(BookingDbContext dbContext) : IRoomSlotRepositor
         return await dbContext.RoomSlots
             .AsNoTracking()
             .Where(rs => !rs.IsBooked)
+            .OrderBy(rs => rs.SlotDate)
+            .ThenBy(rs => rs.RoomName)
             .ToPageResponseAsync(request.Page, request.PageSize);
     }
 
