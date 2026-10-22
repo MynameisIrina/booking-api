@@ -9,14 +9,14 @@ public class CreateRoomSlotCommandHandler(IRoomSlotRepository roomSlotRepository
 {
     public async Task<Result<Guid>> Handle(CreateRoomSlotCommand request, CancellationToken cancellationToken)
     {
-        var existingRoomSlot = await roomSlotRepository.GetRoomSlotByNameAndDateAsync(request.RoomName, request.SlotDate);
+        var existingRoomSlot = await roomSlotRepository.GetRoomSlotByNameAndDateAsync(request.RoomName, request.SlotDate, cancellationToken);
         if (existingRoomSlot is not null)
         {
             return Result<Guid>.Conflict($"Room slot for {request.RoomName} on {request.SlotDate} already exists.");
         }
 
         var roomSlot = new RoomSlot(request.RoomName, request.SlotDate);
-        var roomSlotId = await roomSlotRepository.CreateRoomSlotAsync(roomSlot);
+        var roomSlotId = await roomSlotRepository.CreateRoomSlotAsync(roomSlot, cancellationToken);
         return Result<Guid>.Success(roomSlotId);
     }
 }

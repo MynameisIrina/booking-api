@@ -6,7 +6,7 @@ namespace BookingApi.Persistence.Configurations;
 
 public class DomainEntityConfiguration<T> : IEntityTypeConfiguration<T> where T : DomainEntity
 {
-    public void Configure(EntityTypeBuilder<T> builder)
+    public virtual void Configure(EntityTypeBuilder<T> builder)
     {
         builder.HasKey(x => x.Id);
 

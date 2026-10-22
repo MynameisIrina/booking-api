@@ -15,7 +15,7 @@ public class CreateRoomSlot(IMediator mediator) : Endpoint<CreateRoomSlotRequest
 
     public override async Task HandleAsync(CreateRoomSlotRequest req, CancellationToken ct)
     {
-        var result = await mediator.Send(new CreateRoomSlotCommand(req.RoomName, req.SlotDate, req.UserEmail), ct);
+        var result = await mediator.Send(new CreateRoomSlotCommand(req.RoomName, req.SlotDate), ct);
         if (!result.IsSuccess)
         {
             foreach (var error in result.ValidationErrors)
@@ -34,8 +34,7 @@ public class CreateRoomSlot(IMediator mediator) : Endpoint<CreateRoomSlotRequest
 
 public sealed record CreateRoomSlotRequest(
     string RoomName,
-    DateTime SlotDate,
-    string UserEmail
+    DateTime SlotDate
 );
 
 public sealed record CreateRoomSlotResponse(Guid RoomSlotId);

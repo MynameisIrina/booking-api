@@ -4,16 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BookingApi.Persistence.Configurations;
 
-public class BookingConfiguration : IEntityTypeConfiguration<Booking>
+public class BookingConfiguration : DomainEntityConfiguration<Booking>
 {
-    public void Configure(EntityTypeBuilder<Booking> builder)
+    public override void Configure(EntityTypeBuilder<Booking> builder)
     {
-        builder.Property(x => x.Xmin)
-            .IsRowVersion()
-            .HasColumnName("xmin")
-            .HasColumnType("xid")
-            .ValueGeneratedOnAddOrUpdate();
-        
+        base.Configure(builder);
+
         builder.HasOne<RoomSlot>()
             .WithMany()
             .HasForeignKey(x => x.RoomSlotId)

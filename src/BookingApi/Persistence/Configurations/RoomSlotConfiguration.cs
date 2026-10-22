@@ -1,19 +1,14 @@
 using BookingApi.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BookingApi.Persistence.Configurations;
 
-public class RoomSlotConfiguration : IEntityTypeConfiguration<RoomSlot>
+public class RoomSlotConfiguration : DomainEntityConfiguration<RoomSlot>
 {
-    public void Configure(EntityTypeBuilder<RoomSlot> builder)
+    public override void Configure(EntityTypeBuilder<RoomSlot> builder)
     {
-        builder.Property(x => x.Xmin)
-            .IsRowVersion()
-            .HasColumnName("xmin")
-            .HasColumnType("xid")
-            .ValueGeneratedOnAddOrUpdate();
-        
+        base.Configure(builder);
+
         builder.HasIndex(x => new {x.RoomName, x.SlotDate})
             .IsUnique();
     }
