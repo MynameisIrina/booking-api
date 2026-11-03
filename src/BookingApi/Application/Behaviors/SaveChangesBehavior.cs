@@ -1,3 +1,4 @@
+using Ardalis.Result;
 using BookingApi.Application.Abstractions;
 using MediatR;
 
@@ -19,11 +20,27 @@ public class SaveChangesBehavior<TRequest, TResponse>(
     {
         var response = await next();
 
+        if(!IsSuccessfulResult(response))
+        {
+            logger.LogInformation("Request of type {RequestType} returned a non-successful result. Skipping SaveChangesAsync.", typeof(TRequest).Name);
+            return response;
+        }
+
         // Save changes to the database after the command has been handled
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation("Changes saved to the database for request of type {RequestType}", typeof(TRequest).Name);
 
         return response;
+    }
+
+    private static bool IsSuccessfulResult(TResponse response)
+    {
+        if (response is Ardalis.Result.IResult result)
+        {
+            return result.Status == ResultStatus.Ok || result.Status == ResultStatus.Created || result.Status == ResultStatus.NoContent;
+        }
+
+        return true;
     }
 }
