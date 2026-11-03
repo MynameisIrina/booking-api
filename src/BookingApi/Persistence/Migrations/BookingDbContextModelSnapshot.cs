@@ -81,6 +81,9 @@ namespace BookingApi.Persistence.Migrations
                     b.HasIndex("RoomName", "SlotDate")
                         .IsUnique();
 
+                    b.HasIndex("SlotDate", "RoomName")
+                        .HasFilter("NOT \"IsBooked\"");
+
                     b.ToTable("RoomSlots");
                 });
 
