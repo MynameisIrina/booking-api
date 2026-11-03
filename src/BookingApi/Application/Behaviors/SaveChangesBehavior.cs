@@ -5,7 +5,7 @@ using MediatR;
 namespace BookingApi.Application.Behaviors;
 
 /// <summary>
-/// A MediatR pipeline behavior that saves changes to the database after a command is handled.
+/// A MediatR pipeline behavior that saves changes to the database after a command is handled, only for successful commands.
 /// It is used only for commands that implement the ICommand interface. 
 /// IQuery requests are not affected by this behavior in order to avoid unnecessary database writes for read-only operations.
 /// </summary>

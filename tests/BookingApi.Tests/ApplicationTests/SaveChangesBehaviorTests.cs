@@ -9,11 +9,11 @@ using Moq;
 
 namespace BookingApi.Tests.ApplicationTests;
 
-public class SaveChangesBehaviourTests
+public class SaveChangesBehaviorTests
 {
     private Mock<IUnitOfWork> _unitOfWorkMock;
 
-    public SaveChangesBehaviourTests()
+    public SaveChangesBehaviorTests()
     {
         _unitOfWorkMock = new Mock<IUnitOfWork>();
     }
@@ -29,7 +29,7 @@ public class SaveChangesBehaviourTests
         RequestHandlerDelegate<Result> next = _ => Task.FromResult(Result.Success());
 
         // Act
-        var result = await behavior.Handle(command, next, CancellationToken.None);
+        await behavior.Handle(command, next, CancellationToken.None);
 
         // Assert
         _unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(CancellationToken.None), Times.Once);
@@ -46,7 +46,7 @@ public class SaveChangesBehaviourTests
         RequestHandlerDelegate<Result<Guid>> next = _ => Task.FromResult(Result<Guid>.Success(id));
 
         // Act
-        var result = await behavior.Handle(command, next, CancellationToken.None);
+        await behavior.Handle(command, next, CancellationToken.None);
 
         // Assert
         _unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(CancellationToken.None), Times.Once);
@@ -62,7 +62,7 @@ public class SaveChangesBehaviourTests
         RequestHandlerDelegate<Result<Guid>> next = _ => Task.FromResult(Result<Guid>.Conflict("Failed to create booking"));
 
         // Act
-        var result = await behavior.Handle(command, next, CancellationToken.None);
+        await behavior.Handle(command, next, CancellationToken.None);
 
         // Assert
         _unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(CancellationToken.None), Times.Never);
@@ -76,10 +76,10 @@ public class SaveChangesBehaviourTests
         var id = Guid.NewGuid();
         var command = new DeleteBookingCommand(id);
 
-        RequestHandlerDelegate<Result> next = _ => Task.FromResult(Result.NotFound("Booking not found"));
+        RequestHandlerDelegate<Result> next = _ => Task.FromResult(Result.Invalid());
 
         // Act
-        var result = await behavior.Handle(command, next, CancellationToken.None);
+        await behavior.Handle(command, next, CancellationToken.None);
 
         // Assert
         _unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(CancellationToken.None), Times.Never);
